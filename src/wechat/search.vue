@@ -1,88 +1,74 @@
 <template>
   <div class="app">
-    <Form v-if="currentStatus === 'search'" ref="searchFormValidate" :model="searchForm" :label-width="80">
-      <Tabs v-model="activeTab" style="z-index: 200; padding: 10px 0; margin: 0 10px;">
-        <TabPane label="文档" name="doc" style="min-height: 520px;">
-          <FormItem label="编码 : ">
-            <Input v-model="searchForm.doc.docNum" icon="document-text" autocomplete="off" />
-          </FormItem>
-          <FormItem label="名称 : ">
-            <Input v-model="searchForm.doc.docName" icon="android-create" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建人 : ">
-            <Input v-model="searchForm.doc.docCreatePerson" icon="person" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建时间 : ">
-            <DatePicker type="datetime" placement="bottom-end" v-model="searchForm.doc.docCreateTime" style="width: 100%"></DatePicker>
-          </FormItem>
-          <Button type="error" style="margin-top: 40px;" @click="formCheck" long>查询</Button>
-        </TabPane>
-        <TabPane label="物料" name="matter" style="min-height: 520px;">
-         <FormItem label="编码 : ">
-            <Input v-model="searchForm.matter.materailNum" icon="document-text" autocomplete="off" />
-          </FormItem>
-          <FormItem label="名称 : ">
-            <Input v-model="searchForm.matter.materailName" icon="android-create" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建人 : ">
-            <Input v-model="searchForm.matter.materailCreatePerson" icon="person" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建时间 : ">
-            <DatePicker type="datetime" placement="bottom-end" v-model="searchForm.matter.materailCreateTime" style="width: 100%"></DatePicker>
-          </FormItem>
-          <Button type="error" style="margin-top: 40px;" @click="formCheck" long>查询</Button>
-        </TabPane>
-        <TabPane label="变更申请" name="apply" style="min-height: 520px;">
-          <FormItem label="编码 : ">
-            <Input v-model="searchForm.apply.chgApplyNum" icon="document-text" autocomplete="off" />
-          </FormItem>
-          <FormItem label="名称 : ">
-            <Input v-model="searchForm.apply.chgApplyName" icon="android-create" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建人 : ">
-            <Input v-model="searchForm.apply.chgApplyCreatePerson" icon="person" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建时间 : ">
-            <DatePicker type="datetime" placement="bottom-end" v-model="searchForm.apply.chgApplyCreateTime" style="width: 100%"></DatePicker>
-          </FormItem>
-          <Button type="error" style="margin-top: 40px;" @click="formCheck" long>查询</Button>
-        </TabPane>
-        <TabPane label="变更任务" name="task" style="min-height: 520px;">
-          <FormItem label="名称 : ">
-            <Input v-model="searchForm.task.chgTaskName" icon="android-create" autocomplete="off" />
-          </FormItem>
-          <FormItem label="执行人 : ">
-            <Input v-model="searchForm.task.chgTaskExecutePerson" icon="document-text" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建人 : ">
-            <Input v-model="searchForm.task.chgTaskCreatePerson" icon="person" autocomplete="off" />
-          </FormItem>
-          <FormItem label="创建时间 : ">
-            <DatePicker type="datetime" placement="bottom-end" v-model="searchForm.task.chgTaskCreateTime" style="width: 100%"></DatePicker>
-          </FormItem>
-          <FormItem label="任务状态 : ">
-            <Input v-model="searchForm.task.chgTaskStatus" icon="document-text" autocomplete="off" />
-          </FormItem>
-          <Button type="error" style="margin-top: 40px;" @click="formCheck" long>查询</Button>
-        </TabPane>
-      </Tabs>
-    </Form>
+    <popup v-model="httpError.show" :popup-style="{zIndex: '6001'}" position="top" :show-mask="false">
+      <div class="httpError">
+        {{httpError.msg}}
+      </div>
+    </popup>
+    <div v-if="currentStatus === 'search'">
+      <tab v-model="activeTab">
+        <tab-item :value="0" selected>文档</tab-item>
+        <tab-item :value="1">物料</tab-item>
+        <tab-item :value="2">变更申请</tab-item>
+        <tab-item :value="3">变更任务</tab-item>
+      </tab>
+      <group v-if="activeTab === 0">
+        <x-input label-width="80px" title="编码:" v-model="searchForm.doc.docNum"></x-input>
+        <x-input label-width="80px" title="名称:" v-model="searchForm.doc.docName"></x-input>
+        <x-input label-width="80px" title="创建人:" v-model="searchForm.doc.docCreatePerson"></x-input>
+        <datetime
+          v-model="searchForm.doc.docCreateTime"
+          format="YYYY-MM-DD"
+          title="创建时间:"></datetime>
+      </group>
+      <group v-if="activeTab === 1">
+        <x-input label-width="80px" title="编码:" v-model="searchForm.matter.materailNum"></x-input>
+        <x-input label-width="80px" title="名称:" v-model="searchForm.matter.materailName"></x-input>
+        <x-input label-width="80px" title="创建人:" v-model="searchForm.matter.materailCreatePerson"></x-input>
+        <datetime
+          v-model="searchForm.matter.materailCreateTime"
+          format="YYYY-MM-DD"
+          title="创建时间:"></datetime>
+      </group>
+      <group v-if="activeTab === 2">
+        <x-input label-width="80px" title="编码:" v-model="searchForm.apply.chgApplyNum"></x-input>
+        <x-input label-width="80px" title="名称:" v-model="searchForm.apply.chgApplyName"></x-input>
+        <x-input label-width="80px" title="创建人:" v-model="searchForm.apply.chgApplyCreatePerson"></x-input>
+        <datetime
+          v-model="searchForm.apply.chgApplyCreateTime"
+          format="YYYY-MM-DD"
+          title="创建时间:"></datetime>
+      </group>
+      <group v-if="activeTab === 3">
+        <x-input label-width="80px" title="名称:" v-model="searchForm.task.chgTaskName"></x-input>
+        <x-input label-width="80px" title="执行人:" v-model="searchForm.task.chgTaskExecutePerson"></x-input>
+        <x-input label-width="80px" title="创建人:" v-model="searchForm.task.chgTaskCreatePerson"></x-input>
+        <datetime
+          v-model="searchForm.task.chgTaskCreateTime"
+          format="YYYY-MM-DD"
+          title="创建时间:"></datetime>
+        <x-input label-width="80px" title="任务状态:" v-model="searchForm.task.chgTaskStatus"></x-input>
+      </group>
+      <x-button type="warn" class="searchBtn"  @click.native="formCheck">查询</x-button>
+    </div>
+    
     <div v-if="currentStatus === 'searchResult'">
-      <div class="backbtn" @click="backUp('search')"><Icon type="ios-arrow-left"></Icon></div>
-      <SearchResult :goDetail="backUp" :lists="searchResultData" :resultType="activeTab" />
+      <div class="backbtn" @click="backUp('search')"></div>
+      <SearchResult :goDetail="goDetail" :lists="searchResultData" :resultType="activeTabIndex[activeTab]" />
     </div>
     <div v-if="currentStatus === 'details'">
-      <div class="backbtn" @click="backUp('searchResult')"><Icon type="ios-arrow-left"></Icon></div>
-      <Details :detailType="activeTab" :detailInfo="detailsData" />
-      <Button v-if="activeTab === 'doc'">下载</Button>
+      <div class="backbtn" @click="backUp('searchResult')"></div>
+      <Details :detailType="activeTabIndex[activeTab]" :detailInfo="detailsData" />
+      <div style="padding: 10px;"><x-button v-if="activeTab === 0" type="warn"  @click.native="fileDownload">下载</x-button></div>
     </div>
   </div>
 </template>
 
 <script>
-import { Form, FormItem, Input, Button, Select, Option,
-  CheckboxGroup, Checkbox, Tabs, TabPane, DatePicker, Message, Icon } from 'iview'
+import { Tab, TabItem, Group, XButton, XInput, Datetime, Popup } from 'vux'
+import DocMixin from '../mixin/docMixin'
 import SearchResult from '../components/searchResult'
+import TimeLineBox from '../components/TimeLineBox'
 import Details from '../components/details'
 import request from '../utils/request.js'
 import {host} from '../utils/config.js'
@@ -90,26 +76,26 @@ import {host} from '../utils/config.js'
 export default {
   name: 'Search',
   components: {
-    Form,
-    FormItem,
-    Input,
-    Button,
-    Select,
-    Option,
-    CheckboxGroup,
-    Checkbox,
-    Tabs,
-    TabPane,
-    DatePicker,
-    Message,
+    Tab,
+    TabItem,
+    Group,
+    XButton,
+    XInput,
+    Datetime,
+    Popup,
     SearchResult,
     Details,
-    Icon
+    TimeLineBox
   },
+  mixins: [DocMixin],
   data () {
     return {
+      httpError: { //popup 展示网络请求数据错误
+        show: false,
+        msg: ''
+      },
       currentStatus: 'search', // 类型切换: search searchResult details
-      activeTab: 'doc', // 类型切换: 查询类型切换
+      activeTab: 0, // 类型切换: 查询类型切换
       searchForm: {// 查询数据
         doc: {
           docNum: '',
@@ -138,10 +124,10 @@ export default {
         }
       },
       activeTabIndex: { // post tabIndex 获取源
-        doc: 0,
-        matter: 1,
-        apply: 2,
-        task: 3
+        0: 'doc',
+        1: 'matter',
+        2: 'apply',
+        3: 'task'
       },
       searchResultData: [], // 查询结果列表页
       detailsData: {} // 当前展示查询结果列表一项详细数据
@@ -157,14 +143,21 @@ export default {
         method: 'post',
         data: {
           index: 1,
-          myObj: JSON.stringify(tv.searchForm[tv.activeTab]),
-          tabIndex: tv.activeTabIndex[tv.activeTab]
+          myObj: JSON.stringify(tv.searchForm[tv.activeTabIndex[tv.activeTab]]),
+          tabIndex: tv.activeTab
         }
       }
+      tv.$vux.loading.show()
       request(requestObj).then(function (data) {
-        if (data.status === 200) {
+        tv.$vux.loading.hide()
+        if (data.status === 200 && Array.isArray(data.data)) {
           tv.searchResultData = data.data
           tv.backUp('searchResult')
+        } else {
+          tv.httpError = {
+            show: true,
+            msg: '获取数据失败'
+          }
         }
       }).catch(function (error) {
         console.log(error)
@@ -177,13 +170,13 @@ export default {
       /* 用户输入合法检测与必填项验证 */
       const tv = this
       let empty = true
-      Object.keys(tv.searchForm[tv.activeTab]).forEach(item => {
-        if (tv.searchForm[tv.activeTab][item].length > 0) {
+      Object.keys(tv.searchForm[tv.activeTabIndex[tv.activeTab]]).forEach(item => {
+        if (tv.searchForm[tv.activeTabIndex[tv.activeTab]][item].length > 0) {
           empty = false
         }
       })
       if (empty) {
-        Message.error('查询条件为空')
+        tv.$vux.toast.show('查询条件为空')
       } else {
         tv.submit()
       }
@@ -191,9 +184,72 @@ export default {
     /* 跳转控制 */
     backUp: function (type) {
       this.currentStatus = type
+    },
+    /* 
+     * 进入查询项目详情
+     * @require key 当前选中查询项目id
+     */
+    goDetail: function (key) {
+      const tv = this
+      let numver
+      switch (tv.activeTab) {
+        case 0: numver = key.split('_')
+                tv.searchResultData.every(item => {
+                  if (item.docNum === numver[0] && item.docVer === numver[1]) {
+                    tv.detailsData = item
+                    return false;
+                  }
+                  return true
+                })
+                break;
+        case 1: numver = key.split('_')
+                tv.searchResultData.every(item => {
+                  if (item.materialNum === numver[0] && item.materialVer === numver[1]) {
+                    tv.detailsData = item
+                    return false;
+                  }
+                  return true
+                })
+                break;
+        case 2: tv.searchResultData.every(item => {
+                  if (item.chgApplyId === key) {
+                    tv.detailsData = item
+                    return false;
+                  }
+                  return true
+                })
+                break;
+        case 3: tv.searchResultData.every(item => {
+                  if (item.chgAppId === key) {
+                    tv.detailsData = item
+                    return false;
+                  }
+                  return true
+                })
+                break;
+      }
+      if (tv.activeTab === 0) {
+        tv.downloadvalidate(tv.detailsData)
+      }
+      tv.backUp('details')
     }
   },
-  mounted: function () {}
+  mounted: function () {},
+  watch: {
+    activeTab (val) {
+      console.log(val)
+    },
+    httpError (val) {
+      if (val.show) {
+        setTimeout(() => {
+          this.httpError = {
+            show: false,
+            msg: ''
+          }
+        }, 1000)
+      }
+    }
+  }
 }
 </script>
 
@@ -209,7 +265,7 @@ export default {
   position: fixed;
   top: 15px;
   left: 5px;
-  padding: 0 5px;
+  padding: 0;
   height: 30px;
   line-height: 30px;
   width: 30px;
@@ -217,5 +273,43 @@ export default {
   background: rgba(0,0,0,0.5);
   color: white;
   border-radius: 15px;
+  text-align: center;
+}
+.backbtn:before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #ccc;
+  border-width: 1px 0 0 1px;
+  transform: rotate(315deg);
+  top: 8px;
+  left: 11px;
+}
+a {
+  text-decoration: none;
+}
+/* 重写 vux 样式 */
+.vux-x-input .weui-label {
+  text-align: right;
+  padding-right: 5px;
+}
+.vux-datetime>div:first-of-type {
+  word-wrap: break-word;
+  word-break: break-all;
+  text-align: right;
+  padding-right: 5px;
+  width: 80px;
+}
+.searchBtn {
+  margin-top: 20px;
+}
+/* http error */
+.httpError {
+  background-color: #ffe26d;
+  color: #000;
+  text-align: center;
+  padding: 15px;
+  overflow: hidden;
 }
 </style>

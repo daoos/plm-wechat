@@ -11,7 +11,9 @@ const webpackConfig = {
   entry: {
     tasklist: './src/taskList.js',
     binduser: './src/bindUser.js',
-    unbinduser: './src/unBindUser.js'
+    unbinduser: './src/unBindUser.js',
+    search: './src/search.js',
+    scan: './src/scan.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

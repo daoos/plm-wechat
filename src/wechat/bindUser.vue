@@ -72,12 +72,15 @@ export default {
           userwxh: userWx
         }
       }
-      tv.$vux.loading.show()
+      tv.$vux.loading.show({
+        text: '绑定中'
+      })
       request(requestObj).then(function(data){
         tv.$vux.loading.hide()
         if (data.status === 200 && data.data.status === 'ok'){
           tv.$vux.toast.show({
             text: '绑定成功',
+            time: 3000,
             onHide: wx.closeWindow()
           })
         } else {

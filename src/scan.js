@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Scan from './wechat/scan.vue'
-import 'iview/dist/styles/iview.css'
+import  { LoadingPlugin, ToastPlugin } from 'vux'
 
 Vue.config.productionTip = false
 
+Vue.use(LoadingPlugin)
+Vue.use(ToastPlugin)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

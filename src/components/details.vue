@@ -270,7 +270,7 @@ export default {
     background: #fffff9;
   }
   .details li .texttitle {
-    width: 100px;
+    width: 120px;
     display: inline-block;
     text-align: right;
     font-weight: bold;
