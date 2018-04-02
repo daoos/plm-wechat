@@ -39,7 +39,9 @@
  * designer: heyunjiang
  * time: 2018.3.22
  */
+import { Group, Popup, Icon, XButton, XDialog } from 'vux'
 import { urlGetParamsForObject } from 'hyj-func'
+import TimeLineBox from '../components/TimeLineBox'
 import SearchResult from '../components/searchResult'
 import Details from '../components/details'
 import CheckMixin from '../mixin/checkMixin'
@@ -51,7 +53,13 @@ export default {
   name: 'Scan',
   components: {
     SearchResult,
-    Details
+    Details,
+    Group,
+    Popup,
+    Icon,
+    XButton,
+    XDialog,
+    TimeLineBox
   },
   mixins: [CheckMixin, DocMixin],
   data () {
@@ -98,6 +106,11 @@ export default {
         if (data.status === 200 && Array.isArray(data.data)) {
           tv.searchResultData = data.data
           tv.currentStatus = 'searchResult'
+        } else {
+          tv.httpError = {
+            show: true,
+            msg: '数据获取失败'
+          }
         }
       }).catch(function (error) {
         console.log(error)
@@ -153,6 +166,10 @@ export default {
             tv.workFlowInfo = {
               code: 'F',
               list: []
+            }
+            tv.httpError = {
+              show: true,
+              msg: '数据类型暂不支持'
             }
             tv.$vux.loading.hide()
           }
@@ -376,5 +393,13 @@ export default {
   transform: rotate(315deg);
   top: 8px;
   left: 11px;
+}
+/* http error */
+.httpError {
+  background-color: #ffe26d;
+  color: #000;
+  text-align: center;
+  padding: 15px;
+  overflow: hidden;
 }
 </style>
