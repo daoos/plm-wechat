@@ -6,7 +6,7 @@
       </div>
     </popup>
     <div v-if="currentStatus === 'error'">
-      扫码不合要求
+      {{scanDefaultInfo.content}}
     </div>
     <div v-if="currentStatus === 'searchResult'">
       <SearchResult :goDetail="goDetail" :lists="searchResultData" :resultType="searchType" />
@@ -64,6 +64,9 @@ export default {
   mixins: [CheckMixin, DocMixin],
   data () {
     return {
+      scanDefaultInfo: {
+        content: '扫码不合要求'
+      },
       httpError: { //popup 展示网络请求数据错误
         show: false,
         msg: ''
@@ -106,6 +109,11 @@ export default {
         if (data.status === 200 && Array.isArray(data.data)) {
           tv.searchResultData = data.data
           tv.currentStatus = 'searchResult'
+          if (data.data.length < 1) {
+            tv.scanDefaultInfo = {
+              content: '数据获取失败'
+            }
+          }
         } else {
           tv.httpError = {
             show: true,
@@ -334,12 +342,14 @@ export default {
                   tv.getResultList(obj)
                   break;
       case 'apply': tv.searchType = 'apply';
-                    tv.currentStatus = 'onlyDetails';
-                    tv.getDetails(obj)
+                    tv.getResultList(obj)
+                    /*tv.currentStatus = 'onlyDetails';
+                    tv.getDetails(obj)*/
                     break;
       case 'task': tv.searchType = 'task';
-                   tv.currentStatus = 'onlyDetails';
-                   tv.getDetails(obj)
+                   tv.getResultList(obj)
+                   /*tv.currentStatus = 'onlyDetails';
+                   tv.getDetails(obj)*/
                    break;
       defalut: tv.searchType = 'error';tv.currentStatus = 'error';
     }
