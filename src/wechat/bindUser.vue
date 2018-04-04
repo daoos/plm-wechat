@@ -85,7 +85,8 @@ export default {
           })
         } else {
           tv.$vux.toast.show({
-            text: data.data.errormsg || '绑定失败'
+            text: data.data.errormsg || '绑定失败',
+            type: 'cancel'
           })
         }
       }).catch(function(error){
