@@ -81,7 +81,7 @@ const DocMixin = {
           docName: obj.docName,
           docNum: obj.docNum,
           docVer: obj.docVer,
-          docType: obj.docType,
+          docType: obj.docFormat,
         }
       }
       request(requestObj).then(function (data) {
