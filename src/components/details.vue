@@ -57,10 +57,82 @@
         <li><span class="texttitle">状态:</span> {{detailInfo.status}}</li>
         <li><span class="texttitle">创建人:</span> {{detailInfo.createPerson}}</li>
         <li><span class="texttitle">创建时间:</span> {{detailInfo.createTime}}</li>
-        <li><span class="texttitle">文档变更:</span> </li>
+        <li><span class="texttitle">文档变更:</span></li>
+        <div v-if="detailInfo.relateddoc.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>文档编码</th>
+                <th>文档名称</th>
+                <th>文档版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relateddoc">
+                <td>{{item.docid}}</td>
+                <td>{{item.docname}}</td>
+                <td>{{item.docver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
+        <div v-if="detailInfo.relatedbom.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th>物料版本</th>
+                <th>所属BOM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedbom">
+                <td>{{item.partid}}</td>
+                <td>{{item.partname}}</td>
+                <td>{{item.partver}}</td>
+                <td>{{item.bomname}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
+        <div v-if="detailInfo.relatedtechbom.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th>物料版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedtechbom">
+                <td>{{item.partid}}</td>
+                <td>{{item.partname}}</td>
+                <td>{{item.partver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">工序变更:</span> </li>
+        <div v-if="detailInfo.relatedtechprc.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>工序编码</th>
+                <th>工序名称</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedtechprc">
+                <td>{{item.techprcid}}</td>
+                <td>{{item.techprcver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
       </ul>
     </div>
     <div v-if="detailType === 'task'">
@@ -75,9 +147,81 @@
         <li><span class="texttitle">实际开始时间:</span> {{detailInfo.realStartTime}}</li>
         <li><span class="texttitle">实际结束时间:</span> {{detailInfo.realEndTime}}</li>
         <li><span class="texttitle">文档变更:</span></li>
+        <div v-if="detailInfo.relateddoc.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>文档编码</th>
+                <th>文档名称</th>
+                <th>文档版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relateddoc">
+                <td>{{item.docid}}</td>
+                <td>{{item.docname}}</td>
+                <td>{{item.docver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
+        <div v-if="detailInfo.relatedbom.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th>物料版本</th>
+                <th>所属BOM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedbom">
+                <td>{{item.partid}}</td>
+                <td>{{item.partname}}</td>
+                <td>{{item.partver}}</td>
+                <td>{{item.bomname}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
+        <div v-if="detailInfo.relatedtechbom.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th>物料版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedtechbom">
+                <td>{{item.partid}}</td>
+                <td>{{item.partname}}</td>
+                <td>{{item.partver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">工序变更:</span> </li>
+        <div v-if="detailInfo.relatedtechprc.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>工序编码</th>
+                <th>工序名称</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedtechprc">
+                <td>{{item.techprcid}}</td>
+                <td>{{item.techprcver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
       </ul>
     </div>
     <div v-if="detailType === 'PROJECT_TASK'">
@@ -107,9 +251,81 @@
         <li><span class="texttitle">变更通知版本:</span> {{detailInfo.docver}}</li>
         <li><span class="texttitle">下发时间:</span> {{detailInfo.receivetime}}</li>
         <li><span class="texttitle">文档变更:</span></li>
+        <div v-if="detailInfo.relateddoc.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>文档编码</th>
+                <th>文档名称</th>
+                <th>文档版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relateddoc">
+                <td>{{item.docid}}</td>
+                <td>{{item.docname}}</td>
+                <td>{{item.docver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
+        <div v-if="detailInfo.relatedbom.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th>物料版本</th>
+                <th>所属BOM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedbom">
+                <td>{{item.partid}}</td>
+                <td>{{item.partname}}</td>
+                <td>{{item.partver}}</td>
+                <td>{{item.bomname}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
+        <div v-if="detailInfo.relatedtechbom.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th>物料版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedtechbom">
+                <td>{{item.partid}}</td>
+                <td>{{item.partname}}</td>
+                <td>{{item.partver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">工序变更:</span> </li>
+        <div v-if="detailInfo.relatedtechprc.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>工序编码</th>
+                <th>工序名称</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedtechprc">
+                <td>{{item.techprcid}}</td>
+                <td>{{item.techprcver}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
       </ul>
     </div>
     <div v-if="detailType === 'FAFANG_NOTICE'">
@@ -224,8 +440,13 @@
  * taskList-FAFANG_NOTICE
  */
 
+import { XTable } from 'vux'
+
 export default {
   name: 'Details',
+  components: {
+    XTable
+  },
   props: {
     detailType: {
       type: String,
@@ -236,7 +457,6 @@ export default {
       required: true
     }
   },
-  components: {},
   data () {
     return {}
   }
@@ -267,12 +487,16 @@ export default {
     color: white;
   }
   .details li:nth-of-type(2n+1) {
-    background: #fffff9;
+    background: #f3f3f3;
   }
   .details li .texttitle {
     width: 120px;
     display: inline-block;
     text-align: right;
     font-weight: bold;
+  }
+  .detailXTable {
+    margin: 5px 0;
+    font-size: 12px;
   }
 </style>

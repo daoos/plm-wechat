@@ -15,7 +15,7 @@
         @click.native="cellBoxPanel.checkUITask = !cellBoxPanel.checkUITask"></cell>
 
         <ul @click="goDetail" class="slide" :class="cellBoxPanel.checkUITask?'animate':''">
-          <li v-for="item in taskListData.CheckTask" taskCategory="CheckTask" :detailType="item.tasktype" :taskid="item.taskid">{{item.taskname}}</li>
+          <li v-for="item in taskListData.CheckTask" taskCategory="CheckTask" :detailType="item.tasktype" :taskid="item.taskid">{{item.checkobject}}&nbsp;&nbsp;{{item.taskname}}</li>
         </ul>
 
         <cell
@@ -37,7 +37,7 @@
         @click.native="cellBoxPanel.changeNoticeUITask = !cellBoxPanel.changeNoticeUITask"></cell>
 
         <ul @click="goDetail" class="slide" :class="cellBoxPanel.changeNoticeUITask?'animate':''">
-          <li v-for="item in taskListData.CHANGE_LISTENER" taskCategory="CHANGE_LISTENER" :detailType="item.tasktype" :taskid="item.taskid">{{item.taskname}}</li>
+          <li v-for="item in taskListData.CHANGE_LISTENER" taskCategory="CHANGE_LISTENER" :detailType="item.tasktype" :taskid="item.taskid">{{item.infoObj.docid}}&nbsp;,&nbsp;{{item.infoObj.docver}}</li>
         </ul>
 
         <cell
@@ -48,7 +48,7 @@
         @click.native="cellBoxPanel.faFangUITask = !cellBoxPanel.faFangUITask"></cell>
 
         <ul @click="goDetail" class="slide" :class="cellBoxPanel.faFangUITask?'animate':''">
-          <li v-for="item in taskListData.FAFANG_NOTICE" taskCategory="FAFANG_NOTICE" :detailType="item.tasktype" :taskid="item.taskid">{{item.taskname}}</li>
+          <li v-for="item in taskListData.FAFANG_NOTICE" taskCategory="FAFANG_NOTICE" :detailType="item.tasktype" :taskid="item.taskid">{{item.infoObj.docid}}&nbsp;,&nbsp;{{item.infoObj.docname}}&nbsp;,&nbsp;{{item.infoObj.docver}}&nbsp;&nbsp;发放文档</li>
         </ul>
       </group>
     </div>
@@ -183,6 +183,18 @@ export default {
             if (typeof(result[item]) !== 'undefined') {
               tv.taskListData[item] = [] //清空数组
               Object.keys(result[item]).forEach(jtem => {
+                if (result[item][jtem].tasktype === 'CHANGE_LISTENER') {
+                  result[item][jtem].infoObj = JSON.parse(result[item][jtem].jsonobj)
+                  result[item][jtem].taskid = result[item][jtem].infoObj.chgNoticeID+''
+                  result[item][jtem].receivetime = result[item][jtem].infoObj.fromAppID
+                  result[item][jtem].activeid = result[item][jtem].infoObj.chgTaskID
+                }
+                if (result[item][jtem].tasktype === 'FAFANG_NOTICE') {
+                  result[item][jtem].infoObj = JSON.parse(result[item][jtem].jsonobj)
+                  result[item][jtem].taskid = result[item][jtem].infoObj.outputid+''
+                  result[item][jtem].receivetime = result[item][jtem].infoObj.docid
+                  result[item][jtem].activeid = result[item][jtem].infoObj.docver
+                }
                 tv.taskListData[item].push(result[item][jtem])
               })
             }
@@ -376,6 +388,7 @@ export default {
         const taskid = li.getAttribute('taskid')
         const taskCategory = li.getAttribute('taskCategory')
         let currentLi = {}
+        console.log(tv.taskListData[taskCategory], taskid)
         tv.taskListData[taskCategory].forEach(item => {
           if (item.taskid === taskid) {
             currentLi = item

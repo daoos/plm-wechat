@@ -9,8 +9,7 @@ module.exports = merge(common, {
 	plugins: Object.keys(common.entry).map(function(item){
 	    return new HtmlWebpackPlugin({
 	      filename: path.resolve(__dirname, './dist/' + item + '.html'),
-	      template: 'src/index.html',
-	      title: item,
+	      template: 'src/template/' + item + '.html',
 	      chunks: [item],
 	      inject: true,
 	      chunksSortMode: 'dependency'
