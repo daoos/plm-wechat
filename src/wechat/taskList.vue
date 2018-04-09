@@ -449,10 +449,11 @@ export default {
 }
 .taskList li {
   list-style: none;
-  height: 40px;
+  height: auto;
   line-height: 40px;
   background: #fbfbfb;
   padding-left: 32px;
+  overflow: scroll;
 }
 .taskList li:nth-of-type(2n+1) {
   background: #fffff9;
