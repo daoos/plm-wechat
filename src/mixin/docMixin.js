@@ -98,17 +98,24 @@ const DocMixin = {
       const tv = this
       if (this.downloadFileInfo.code == 'S') {
         // window.location.href=this.downloadFileInfo.downloadUrl;
-        /*let tempLink = document.createElement('a');
-        tempLink.style.display = 'none';
-        tempLink.href = this.downloadFileInfo.downloadUrl;
-        tempLink.setAttribute('download', '');
-        if (typeof tempLink.download === 'undefined') {
-          tempLink.setAttribute('target', '_blank');
+        // let tempLink = document.createElement('a');
+        // tempLink.style.display = 'none';
+        // tempLink.href = this.downloadFileInfo.downloadUrl;
+        // tempLink.setAttribute('download', '');
+        // if (typeof tempLink.download === 'undefined') {
+        //   tempLink.setAttribute('target', '_blank');
+        // }
+        // document.body.appendChild(tempLink);
+        // tempLink.click();
+        // document.body.removeChild(tempLink);
+        let url = this.downloadFileInfo.downloadUrl
+        // 微信环境判断
+        if (navigator.userAgent.indexOf('MicroMessenger')>-1) {
+          url += '&isDownload=0'
+        } else {
+          url += '&isDownload=1'
         }
-        document.body.appendChild(tempLink);
-        tempLink.click();
-        document.body.removeChild(tempLink);*/
-        downloadFileForUrl(this.downloadFileInfo.downloadUrl)
+        downloadFileForUrl(url)
       } else {
         tv.httpError = {
           show: true,

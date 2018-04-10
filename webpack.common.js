@@ -14,8 +14,8 @@ const webpackConfig = {
     unbinduser: './src/unBindUser.js',
     search: './src/search.js',
     scan: './src/scan.js',
-    wxtasktemplate: './src/wxtasktemplate.js'
-    // download: './src/download.js'
+    wxtasktemplate: './src/wxtasktemplate.js',
+    download: './src/download.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
