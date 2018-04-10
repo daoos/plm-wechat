@@ -1,4 +1,18 @@
-practice for webpack
+plm 微信源码
+
+> for webchat
+
+## 项目介绍
+
+使用vue-cli构建的简单vue项目
+
+微信项目，用户绑定、解绑，任务列表、项目列表，查询、扫码
+
+关键技术: vue、webpack、axios
+
+vue: 组件、数据双向绑定、通信、mixin、指令
+
+webpack: 多入口
 
 ## 要点
 
