@@ -20,7 +20,43 @@
         <li><span class="texttitle">修改人:</span> {{detailInfo.changePerson}}</li>
         <li><span class="texttitle">备注:</span> {{detailInfo.remarks}}</li>
         <li><span class="texttitle">关联的任务:</span> {{detailInfo.docNum}}</li>
+        <div v-if="detailInfo.relatedTasks.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>项目编码</th>
+                <th>项目名称</th>
+                <th>任务名称</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedTasks">
+                <td>{{item.belongProjectNum}}</td>
+                <td>{{item.belongProjectName}}</td>
+                <td>{{item.taskName}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
         <li><span class="texttitle">关联的物料:</span> {{detailInfo.docNum}}</li>
+        <div v-if="detailInfo.relatedMaterails.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th>物料版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedMaterails">
+                <td>{{item.materailNum}}</td>
+                <td>{{item.materailName}}</td>
+                <td>{{item.materailVer}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
       </ul>
     </div>
     <div v-if="detailType === 'matter'">
@@ -35,7 +71,6 @@
         <li><span class="texttitle">摘要:</span> {{detailInfo.docAbstract}}</li>
         <li><span class="texttitle">状态:</span> {{detailInfo.status}}</li>
         <li><span class="texttitle">创建人:</span> {{detailInfo.createPerson}}</li>
-        <li><span class="texttitle">创建人:</span> {{detailInfo.createPerson}}</li>
         <li><span class="texttitle">修改人:</span> {{detailInfo.changePerson}}</li>
         <li><span class="texttitle">修改时间:</span> {{detailInfo.changeTime}}</li>
         <li><span class="texttitle">种类:</span> {{detailInfo.materailClass}}</li>
@@ -48,6 +83,24 @@
         <li><span class="texttitle">型号:</span> {{detailInfo.model}}</li>
         <li><span class="texttitle">产品类型:</span> {{detailInfo.productClass}}</li>
         <li><span class="texttitle">关联的文档:</span> </li>
+        <div v-if="detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>文档编码</th>
+                <th>文档名称</th>
+                <th>文档版本</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailInfo.relatedDocs">
+                <td>{{item.docNum}}</td>
+                <td>{{item.docName}}</td>
+                <td>{{item.docVer}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
       </ul>
     </div>
     <div v-if="detailType === 'apply'">
@@ -58,7 +111,7 @@
         <li><span class="texttitle">创建人:</span> {{detailInfo.createPerson}}</li>
         <li><span class="texttitle">创建时间:</span> {{detailInfo.createTime}}</li>
         <li><span class="texttitle">文档变更:</span></li>
-        <div v-if="detailInfo.relateddoc.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -68,16 +121,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relateddoc">
-                <td>{{item.docid}}</td>
-                <td>{{item.docname}}</td>
-                <td>{{item.docver}}</td>
+              <tr v-for="item in detailInfo.relatedDocs">
+                <td>{{item.docNum}}</td>
+                <td>{{item.docName}}</td>
+                <td>{{item.docVer}}</td>
               </tr>
             </tbody>
           </x-table>
         </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedbom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDesignBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -88,7 +141,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relatedbom">
+              <tr v-for="item in detailInfo.relatedDesignBom">
                 <td>{{item.partid}}</td>
                 <td>{{item.partname}}</td>
                 <td>{{item.partver}}</td>
@@ -98,7 +151,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedtechbom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -108,7 +161,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relatedtechbom">
+              <tr v-for="item in detailInfo.relatedTechnicsBom">
                 <td>{{item.partid}}</td>
                 <td>{{item.partname}}</td>
                 <td>{{item.partver}}</td>
@@ -117,7 +170,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工序变更:</span> </li>
-        <div v-if="detailInfo.relatedtechprc.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsProcess.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -126,7 +179,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relatedtechprc">
+              <tr v-for="item in detailInfo.relatedTechnicsProcess">
                 <td>{{item.techprcid}}</td>
                 <td>{{item.techprcver}}</td>
               </tr>
@@ -147,7 +200,7 @@
         <li><span class="texttitle">实际开始时间:</span> {{detailInfo.realStartTime}}</li>
         <li><span class="texttitle">实际结束时间:</span> {{detailInfo.realEndTime}}</li>
         <li><span class="texttitle">文档变更:</span></li>
-        <div v-if="detailInfo.relateddoc.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -157,16 +210,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relateddoc">
-                <td>{{item.docid}}</td>
-                <td>{{item.docname}}</td>
-                <td>{{item.docver}}</td>
+              <tr v-for="item in detailInfo.relatedDocs">
+                <td>{{item.docNum}}</td>
+                <td>{{item.docName}}</td>
+                <td>{{item.docVer}}</td>
               </tr>
             </tbody>
           </x-table>
         </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedbom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDesignBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -177,7 +230,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relatedbom">
+              <tr v-for="item in detailInfo.relatedDesignBom">
                 <td>{{item.partid}}</td>
                 <td>{{item.partname}}</td>
                 <td>{{item.partver}}</td>
@@ -187,7 +240,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedtechbom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -197,7 +250,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relatedtechbom">
+              <tr v-for="item in detailInfo.relatedTechnicsBom">
                 <td>{{item.partid}}</td>
                 <td>{{item.partname}}</td>
                 <td>{{item.partver}}</td>
@@ -206,7 +259,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工序变更:</span> </li>
-        <div v-if="detailInfo.relatedtechprc.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsProcess.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -215,7 +268,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailInfo.relatedtechprc">
+              <tr v-for="item in detailInfo.relatedTechnicsProcess">
                 <td>{{item.techprcid}}</td>
                 <td>{{item.techprcver}}</td>
               </tr>
