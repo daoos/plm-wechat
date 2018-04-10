@@ -232,7 +232,7 @@ export default {
       }
       tv.$vux.loading.show()
       request(requestObj).then(function (data) {
-        if (data.status === 200) {
+        if (data.status === 200 && typeof(data.data) === 'object' && data.data !== null) {
           tv.detailsData = data.data
           if (data.data.taskTypes === 'CHECK_DOC_TASK') {
             //文档审批
@@ -261,6 +261,12 @@ export default {
             }
             tv.$vux.loading.hide()
           }
+        } else {
+          tv.httpError = {
+            show: true,
+            msg: '服务器返回数据格式错误'
+          }
+          tv.$vux.loading.hide()
         }
       }).catch(function (error) {
         console.log(error)
@@ -388,7 +394,6 @@ export default {
         const taskid = li.getAttribute('taskid')
         const taskCategory = li.getAttribute('taskCategory')
         let currentLi = {}
-        console.log(tv.taskListData[taskCategory], taskid)
         tv.taskListData[taskCategory].forEach(item => {
           if (item.taskid === taskid) {
             currentLi = item

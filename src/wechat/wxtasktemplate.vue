@@ -6,15 +6,7 @@
       </div>
     </popup>
     <div v-if="currentStatus === 'error'">
-      {{scanDefaultInfo.content}}
-    </div>
-    <div v-if="currentStatus === 'searchResult'">
-      <SearchResult :goDetail="goDetail" :lists="searchResultData" :resultType="searchType" />
-    </div>
-    <div v-if="currentStatus === 'details'">
-      <div class="backbtn" @click="backUp('searchResult')"></div>
-      <Details :detailType="searchType" :detailInfo="detailsData" />
-      <div style="padding: 10px;"><x-button v-if="activeTab === 0" type="warn"  @click.native="fileDownload">下载</x-button></div>
+      {{errorDefaultInfo.content}}
     </div>
     <div v-if="currentStatus === 'onlyDetails'">
       <Details :detailType="detailType" :detailInfo="detailsData" />
@@ -51,29 +43,25 @@
 <script>
 /*
  * @currentStatus
- * error: 二维码信息获取错误展示
- * searchResult: 查询结果列表展示
- * details: 通过查询结果列表进入的结果详情
- * onlyDetails: 通过扫码进入的任务详情
+ * error: 模板消息展示获取错误展示
+ * onlyDetails: 通过模板消息进入的任务详情
  * designer: heyunjiang
- * time: 2018.3.22
+ * time: 2018.4.10
  */
 import { Group, Popup, Icon, XButton, XDialog } from 'vux'
 import { urlGetParamsForObject } from 'hyj-func'
 import TimeLineBox from '../components/TimeLineBox'
-import SearchResult from '../components/searchResult'
 import Details from '../components/details'
-import CheckMixin from '../mixin/checkMixin'
 import TaskCheck from '../components/TaskCheck'
 import Transfer from '../components/Transfer'
+import CheckMixin from '../mixin/checkMixin'
 import DocMixin from '../mixin/docMixin'
 import request from '../utils/request.js'
 import {host} from '../utils/config.js'
 
 export default {
-  name: 'Scan',
+  name: 'Wxtasktemplate',
   components: {
-    SearchResult,
     Details,
     Group,
     Popup,
@@ -87,23 +75,14 @@ export default {
   mixins: [CheckMixin, DocMixin],
   data () {
     return {
-      scanDefaultInfo: {
+      errorDefaultInfo: {
         content: '扫码不合要求'
       },
       httpError: { //popup 展示网络请求数据错误
         show: false,
         msg: ''
       },
-      currentStatus: '', // 用于切换界面
-      searchType: 'doc', // 查询类型
-      scanEnterInfo: {},    // 当前扫码基础信息
-      searchTypeIndex: { // post 传递的 tabIndex
-        doc: 0,
-        matter: 1,
-        apply: 2,
-        task: 3
-      },
-      searchResultData: [],
+      currentStatus: 'onlyDetails', // 用于切换界面
       detailType: '', // 详情类型
       selectedTasks: [], // 选中任务简要信息列表，如果单一任务，则 length = 1
       detailsData: {} // 单一任务详细信息
@@ -111,47 +90,10 @@ export default {
   },
   methods: {
     /*
-     * 入口一: 进入查询结果列表页
-     * 提交查询信息, 并进入查询结果界面
-     * @require obj 查询信息
-     */
-    getResultList: function (obj) {
-      const tv = this
-      const requestObj = {
-        url: host + 'wxservice/wxsearchquery',
-        method: 'post',
-        data: {
-          index: 1,
-          myObj: JSON.stringify(obj),
-          tabIndex: tv.searchTypeIndex[tv.searchType]
-        }
-      }
-      tv.$vux.loading.show()
-      request(requestObj).then(function (data) {
-        tv.$vux.loading.hide()
-        if (data.status === 200 && Array.isArray(data.data)) {
-          tv.searchResultData = data.data
-          tv.currentStatus = 'searchResult'
-          if (data.data.length < 1) {
-            tv.scanDefaultInfo = {
-              content: '数据获取失败'
-            }
-          }
-        } else {
-          tv.httpError = {
-            show: true,
-            msg: '数据获取失败'
-          }
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
-    },
-    /*
-     * 入口二: 进入任务详情
+     * 进入任务详情
      * 包含: 文档审批、变更申请审批、变更审批、项目任务、发放文档、变更通知
      * 注意: 不包含设计BOM审批
-     * @require obj 任务概略信息 4个必要字段
+     * @require obj 任务概略信息
      */
     getDetails: function(obj){
       /* 单纯获取任务详情信息, 不控制进入查询结果界面 */
@@ -198,10 +140,6 @@ export default {
               code: 'F',
               list: []
             }
-            tv.httpError = {
-              show: true,
-              msg: '数据类型暂不支持'
-            }
             tv.$vux.loading.hide()
           }
         } else {
@@ -218,54 +156,6 @@ export default {
     /* 跳转控制 */
     backUp: function(type) {
       this.currentStatus = type
-    },
-    /* 
-     * 进入查询项目详情
-     * @require key 当前选中查询项目id
-     */
-    goDetail: function (key) {
-      const tv = this
-      let numver
-      switch (tv.searchTypeIndex[tv.searchType]) {
-        case 0: numver = key.split('_')
-                tv.searchResultData.every(item => {
-                  if (item.docNum === numver[0] && item.docVer === numver[1]) {
-                    tv.detailsData = item
-                    return false;
-                  }
-                  return true
-                })
-                break;
-        case 1: numver = key.split('_')
-                tv.searchResultData.every(item => {
-                  if (item.materialNum === numver[0] && item.materialVer === numver[1]) {
-                    tv.detailsData = item
-                    return false;
-                  }
-                  return true
-                })
-                break;
-        case 2: tv.searchResultData.every(item => {
-                  if (item.chgApplyId === key) {
-                    tv.detailsData = item
-                    return false;
-                  }
-                  return true
-                })
-                break;
-        case 3: tv.searchResultData.every(item => {
-                  if (item.chgAppId === key) {
-                    tv.detailsData = item
-                    return false;
-                  }
-                  return true
-                })
-                break;
-      }
-      if (tv.activeTab === 0) {
-        tv.downloadvalidate(tv.detailsData)
-      }
-      tv.backUp('details')
     },
     /* 
      * 3.2 获取变更申请流程详情
@@ -352,36 +242,10 @@ export default {
     }
   },
   mounted: function () {
+    // sessionStorage.setItem('userWxh', 'ossKL1kv1VKPFGr7lanAasofrzb4')
     const obj = urlGetParamsForObject(window.location.href)
     const tv = this
-    tv.scanEnterInfo = obj
-    if (typeof(obj.rettype) === 'undefined') {
-      tv.currentStatus = 'error'
-    }
-    switch(obj.rettype) {
-      case 'doc': tv.searchType = 'doc';
-                  if (+(obj.signing) === 0) {
-                    tv.getResultList(obj)
-                  } else {
-                    tv.currentStatus = 'onlyDetails'
-                    tv.getDetails(obj)
-                  }
-                  break;
-      case 'mat': tv.searchType = 'matter';
-                  tv.getResultList(obj)
-                  break;
-      case 'apply': tv.searchType = 'apply';
-                    tv.getResultList(obj)
-                    /*tv.currentStatus = 'onlyDetails';
-                    tv.getDetails(obj)*/
-                    break;
-      case 'task': tv.searchType = 'task';
-                   tv.getResultList(obj)
-                   /*tv.currentStatus = 'onlyDetails';
-                   tv.getDetails(obj)*/
-                   break;
-      defalut: tv.searchType = 'error';tv.currentStatus = 'error';
-    }
+    tv.getDetails(obj)
   },
   watch: {
     httpError (val) {

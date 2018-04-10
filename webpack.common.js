@@ -13,7 +13,8 @@ const webpackConfig = {
     binduser: './src/bindUser.js',
     unbinduser: './src/unBindUser.js',
     search: './src/search.js',
-    scan: './src/scan.js'
+    scan: './src/scan.js',
+    wxtasktemplate: './src/wxtasktemplate.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
