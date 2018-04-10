@@ -17,7 +17,8 @@ export default {
   methods: {},
   mounted: function(){
     if (navigator.userAgent.indexOf('MicroMessenger') === -1) {
-      window.location.href = document.location.search.slice(1)
+      // console.log(document.location.search.slice(1).split('=')[1])
+      window.location.href = document.location.search.slice(1).split('=')[1]
     }
   }
 }
