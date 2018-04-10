@@ -380,6 +380,9 @@ export default {
                    /*tv.currentStatus = 'onlyDetails';
                    tv.getDetails(obj)*/
                    break;
+      case 'proj': tv.currentStatus = 'onlyDetails';
+                   tv.getDetails(obj)
+                   break;
       defalut: tv.searchType = 'error';tv.currentStatus = 'error';
     }
   },

@@ -7,16 +7,20 @@
     </popup>
     <div v-if="currentStatus === 'taskList'" class="taskList">
       <group>
-        <cell
-        :title="'审签任务('+taskListData.CheckTask.length+')'"
-        is-link
-        :border-intent="false"
-        :arrow-direction="cellBoxPanel.checkUITask ? 'up' : 'down'"
-        @click.native="cellBoxPanel.checkUITask = !cellBoxPanel.checkUITask"></cell>
+        <v-touch v-on:pressup="multipleCheck">
+          <cell
+          :title="'审签任务('+taskListData.CheckTask.length+')'"
+          is-link
+          :border-intent="false"
+          :arrow-direction="cellBoxPanel.checkUITask ? 'up' : 'down'"
+          @click.native="cellBoxPanel.checkUITask = !cellBoxPanel.checkUITask"></cell>
+        </v-touch>
 
-        <ul @click="goDetail" class="slide" :class="cellBoxPanel.checkUITask?'animate':''">
+        <ul v-if="!isMultipleCheck" @click="goDetail" class="slide" :class="cellBoxPanel.checkUITask?'animate':''">
           <li v-for="item in taskListData.CheckTask" taskCategory="CheckTask" :detailType="item.tasktype" :taskid="item.taskid">{{item.checkobject}}&nbsp;&nbsp;{{item.taskname}}</li>
         </ul>
+
+        <checklist v-if="isMultipleCheck" :options="mutipleList" v-model="mutipleListValue" class="slide" :class="cellBoxPanel.checkUITask?'animate':''"></checklist>
 
         <cell
         :title="'项目任务('+taskListData.PROJECT_TASK.length+')'"
@@ -82,6 +86,10 @@
         BOM结构
         <div slot="footer"></div>
     </x-dialog> -->
+    <div v-if="isMultipleCheck">
+      <x-button type="primary" @click.native="multipleCheckStart">批量审批</x-button>
+      <x-button type="warn" @click.native="multipleCheckCancle">取消</x-button>
+    </div>
   </div>
 </template>
 
@@ -112,7 +120,7 @@
  * CHANGE_LISTENER
  * FAFANG_NOTICE
  */
-import { Group, Cell, CellBox, Popup, Icon, XButton, XDialog } from 'vux'
+import { Group, Cell, CellBox, Popup, Icon, XButton, XDialog, Checklist } from 'vux'
 import { downloadFileForUrl } from 'hyj-func'
 import CheckMixin from '../mixin/checkMixin'
 import DocMixin from '../mixin/docMixin'
@@ -136,7 +144,8 @@ export default {
     XButton,
     XDialog,
     TaskCheck,
-    Transfer
+    Transfer,
+    Checklist
   },
   mixins: [CheckMixin, DocMixin],
   data () {
@@ -165,7 +174,6 @@ export default {
     }
   },
   methods: {
-    test: function () {},
     /* 1. 获取任务列表 */
     getTaskList: function () {
       const tv = this
@@ -199,6 +207,15 @@ export default {
               })
             }
           })
+          // 设置批量审批选项值
+          if (tv.mutipleList) {
+            tv.mutipleList = Object.keys(result.CheckTask).map(ktem=>{
+              return {
+                key: ktem,
+                value: result.CheckTask[ktem].checkobject + '&nbsp;&nbsp;' + result.CheckTask[ktem].taskname
+              }
+            })
+          }
         } else {
           tv.httpError = {
             show: true,
@@ -386,6 +403,7 @@ export default {
     },
     /* 前往任务详情 */
     goDetail: function (e) {
+      if (this.isMultipleCheck) {return ;}
       const li = e.target
       const tv = this
       /* 进入详情 */

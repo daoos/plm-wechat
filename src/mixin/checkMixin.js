@@ -13,7 +13,8 @@
  *   httpError: { //错误提示
  *     show: false,
  *     msg: ''
- *   }
+ *   },
+ *   taskListData: {CheckTask: []}, // 当前任务简要信息列表集合，用于批量审批
  *   detailsData: {}, // 单一任务详情
  *   selectedTasks: [], // 选中任务简要信息列表，如果单一任务，则 length = 1
  *   detailType: '' // 当前任务类型
@@ -32,6 +33,8 @@ const CheckMixin = {
   data () {
   	return {
   	  isMultipleCheck: false, //是否是批量审批
+      mutipleListValue: [], //批量审批-当前选中值
+      mutipleList: [], //批量审批-当前选项
       userAuthority: {  // 审批权限
         approveYN: 'S',
         bill: {
@@ -300,6 +303,54 @@ const CheckMixin = {
         checkModalStatus: false,
         doTransfor: false
       }
+    },
+    /* 
+     * 7 批量审批开始
+     */
+    multipleCheck: function () {
+      const tv = this
+      tv.isMultipleCheck = true
+    },
+    /*
+     * 8 执行批量审批
+     * 实现了：封装selectedTasks、进入 goCheckModal
+     */
+    multipleCheckStart: function () {
+      const tv = this
+      let isSameTasks = true
+      // 封装 selectedTasks 信息
+      if (tv.taskListData && tv.taskListData.CheckTask) {
+        tv.selectedTasks = tv.mutipleListValue.map(item => {
+          return tv.taskListData.CheckTask.filter(jtem => {
+            return jtem.taskid === item
+          })[0]
+        })
+        // 验证是否是同一任务类型
+        for(let i=1;i<tv.selectedTasks.length;i++) {
+          if (tv.selectedTasks[i].tasktype !== tv.selectedTasks[i-1].tasktype) {
+            isSameTasks = false
+          }
+        }
+        if (isSameTasks) {
+          tv.goCheckModal()
+        } else {
+          tv.httpError = {
+            show: true,
+            msg: '请选择相同类型任务'
+          }
+        }
+      } else {
+        tv.multipleCheckCancle()
+      }
+    },
+    /*
+     * 9 取消执行批量审批
+     */
+    multipleCheckCancle: function () {
+      const tv = this
+      tv.selectedTasks = []
+      tv.mutipleListValue = []
+      tv.isMultipleCheck = false
     }
   }
 }

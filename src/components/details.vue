@@ -19,7 +19,7 @@
         <li><span class="texttitle">失效时间:</span> {{detailInfo.invalidTime}}</li>
         <li><span class="texttitle">修改人:</span> {{detailInfo.changePerson}}</li>
         <li><span class="texttitle">备注:</span> {{detailInfo.remarks}}</li>
-        <li><span class="texttitle">关联的任务:</span> {{detailInfo.docNum}}</li>
+        <li><span class="texttitle">关联的任务:</span> </li>
         <div v-if="detailInfo.relatedTasks.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
@@ -38,7 +38,7 @@
             </tbody>
           </x-table>
         </div>
-        <li><span class="texttitle">关联的物料:</span> {{detailInfo.docNum}}</li>
+        <li><span class="texttitle">关联的物料:</span> </li>
         <div v-if="detailInfo.relatedMaterails.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>

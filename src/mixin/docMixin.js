@@ -81,7 +81,7 @@ const DocMixin = {
           docName: obj.docName,
           docNum: obj.docNum,
           docVer: obj.docVer,
-          docType: obj.docFormat,
+          docType: obj.docFormat || obj.docType,
         }
       }
       request(requestObj).then(function (data) {
@@ -97,6 +97,17 @@ const DocMixin = {
     fileDownload: function () {
       const tv = this
       if (this.downloadFileInfo.code == 'S') {
+        // window.location.href=this.downloadFileInfo.downloadUrl;
+        /*let tempLink = document.createElement('a');
+        tempLink.style.display = 'none';
+        tempLink.href = this.downloadFileInfo.downloadUrl;
+        tempLink.setAttribute('download', '');
+        if (typeof tempLink.download === 'undefined') {
+          tempLink.setAttribute('target', '_blank');
+        }
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);*/
         downloadFileForUrl(this.downloadFileInfo.downloadUrl)
       } else {
         tv.httpError = {
