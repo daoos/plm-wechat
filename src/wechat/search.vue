@@ -49,6 +49,7 @@
           title="创建时间:"></datetime>
         <x-input label-width="80px" title="任务状态:" v-model="searchForm.task.chgTaskStatus"></x-input>
       </group>
+      <x-button type="primary" class="searchBtn"  @click.native="resetInput">重置</x-button>
       <x-button type="warn" class="searchBtn"  @click.native="formCheck">查询</x-button>
     </div>
     
@@ -179,6 +180,37 @@ export default {
         tv.$vux.toast.show('查询条件为空')
       } else {
         tv.submit()
+      }
+    },
+    resetInput: function () {
+      switch(this.activeTab) {
+        case 0:
+          this.searchForm.doc.docNum = '';
+          this.searchForm.doc.docName = '';
+          this.searchForm.doc.docCreatePerson = '';
+          this.searchForm.doc.docCreateTime = '';
+          break;
+        case 1:
+          this.searchForm.matter.materailNum = '';
+          this.searchForm.matter.materailName = '';
+          this.searchForm.matter.materailCreatePerson = '';
+          this.searchForm.matter.materailCreateTime = '';
+          break;
+        case 2:
+          this.searchForm.apply.chgApplyNum = '';
+          this.searchForm.apply.chgApplyName = '';
+          this.searchForm.apply.chgApplyCreatePerson = '';
+          this.searchForm.apply.chgApplyCreateTime = '';
+          break;
+        case 3:
+          this.searchForm.task.chgTaskName = '';
+          this.searchForm.task.chgTaskExecutePerson = '';
+          this.searchForm.task.chgTaskCreatePerson = '';
+          this.searchForm.task.chgTaskCreateTime = '';
+          this.searchForm.task.chgTaskStatus = '';
+          break;
+        default:
+          break;
       }
     },
     /* 跳转控制 */
