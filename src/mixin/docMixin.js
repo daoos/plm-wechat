@@ -115,7 +115,8 @@ const DocMixin = {
         } else {
           url += '&isDownload=1'
         }
-        downloadFileForUrl(url)
+        window.location.href=url
+        // downloadFileForUrl(url)
       } else {
         tv.httpError = {
           show: true,
