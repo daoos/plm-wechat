@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { downloadFileForUrl } from 'hyj-func'
 
 export default {
   name: 'Download',
@@ -18,7 +19,8 @@ export default {
   mounted: function(){
     if (navigator.userAgent.indexOf('MicroMessenger') === -1) {
       console.log(document.location.search.slice(1).split('=')[1])
-      window.location.href = document.location.search.slice(1).split('=')[1]
+      const downloadUrl = window.btoa(document.location.search.slice(1).split('=')[1])
+      downloadFileForUrl(downloadUrl)
     }
   }
 }

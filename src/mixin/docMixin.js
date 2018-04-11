@@ -97,17 +97,6 @@ const DocMixin = {
     fileDownload: function () {
       const tv = this
       if (this.downloadFileInfo.code == 'S') {
-        // window.location.href=this.downloadFileInfo.downloadUrl;
-        // let tempLink = document.createElement('a');
-        // tempLink.style.display = 'none';
-        // tempLink.href = this.downloadFileInfo.downloadUrl;
-        // tempLink.setAttribute('download', '');
-        // if (typeof tempLink.download === 'undefined') {
-        //   tempLink.setAttribute('target', '_blank');
-        // }
-        // document.body.appendChild(tempLink);
-        // tempLink.click();
-        // document.body.removeChild(tempLink);
         let url = this.downloadFileInfo.downloadUrl
         // 微信环境判断
         if (navigator.userAgent.indexOf('MicroMessenger')>-1) {
@@ -115,8 +104,8 @@ const DocMixin = {
         } else {
           url += '&isDownload=1'
         }
+        // 进入下载页
         window.location.href=url
-        // downloadFileForUrl(url)
       } else {
         tv.httpError = {
           show: true,
