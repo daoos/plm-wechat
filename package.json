@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "hyj-func": "^1.2.0",
+    "js-base64": "^2.4.3",
     "vue": "^2.5.16",
     "vue-touch": "^2.0.0-beta.4",
     "vux": "^2.8.1",
