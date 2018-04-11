@@ -86,7 +86,7 @@
         BOM结构
         <div slot="footer"></div>
     </x-dialog> -->
-    <div v-if="isMultipleCheck">
+    <div v-if="isMultipleCheck" class="multipleCheckBtn">
       <x-button type="primary" @click.native="multipleCheckStart">批量审批</x-button>
       <x-button type="warn" @click.native="multipleCheckCancle">取消</x-button>
     </div>
@@ -549,5 +549,9 @@ export default {
   text-align: center;
   padding: 15px;
   overflow: hidden;
+}
+.multipleCheckBtn {
+  margin-top: 20px;
+  padding: 0 10px;
 }
 </style>

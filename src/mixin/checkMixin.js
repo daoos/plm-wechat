@@ -1,7 +1,7 @@
 /*
  * type: mixin
  * name: 任务审批
- * function: 用于需要审批的组件选项
+ * function: 用于需要审批的组件选项，支持批量审批
  * mentions: 这里只包含基础数据和方法，对于组件的使用需要自行引入
  * example: taskList.vue
  * includes: data, methods
@@ -24,7 +24,7 @@
  * }
  * creator: heyunjiang
  * time: 2018.3.29
- * update: 2018.4.1
+ * update: 2018.4.11
  */
 import request from '../utils/request.js'
 import {host} from '../utils/config.js'
@@ -114,16 +114,33 @@ const CheckMixin = {
     /* 2 打开执行转发模态框，并获取转发人列表信息 */
     goDoTransfor: function () {
       const tv = this
+      if (this.isMultipleCheck && !this._multipleCheckIsSame()) {
+        tv.httpError = {
+          show: true,
+          msg: '请选择相同类型任务'
+        }
+        return ;
+      }
+      let url, data
+      const firstTask = tv.selectedTasks[0]
+      if (this.isMultipleCheck) {
+        url = host + 'wxservice/getTranstaskPerson'
+        data = "<id>"+firstTask.taskid+"</id><type>"+firstTask.tasktype+"</type><personid>"+firstTask.personid+"</personid>"
+        data += "<receivetime>"+firstTask.receivetime+"</receivetime><activeid>"+firstTask.activeid+"</activeid>"
+      } else {
+        url = host + 'wxservice/single/getTranstaskPerson'
+        data = {
+          activeid: firstTask.activeid,
+          receivetime: firstTask.receivetime,
+          taskId: firstTask.taskid,
+          type: firstTask.tasktype
+        }
+      }
       /* 获取转发人列表信息 */
       const requestObj = {
-        url: host + 'wxservice/single/getTranstaskPerson',
+        url,
         method: 'post',
-        data: {
-          activeid: tv.selectedTasks[0].activeid,
-          receivetime: tv.selectedTasks[0].receivetime,
-          taskId: tv.detailsData.taskid,
-          type: tv.detailType
-        }
+        data
       }
       tv.$vux.loading.show()
       request(requestObj).then(function (data) {
@@ -161,12 +178,8 @@ const CheckMixin = {
       if (typeof(bool) !== 'boolean') {
         tv.finishTask()
       }
-      if (this.isMultipleCheck) {
-        // 是否是批量审批
-        tv.finishTask()
-      }
       // 构造 url, data, action
-      let url = '', data = {}, action = 'C'
+      let url = '', data, action = 'C'
       if (ot == 0) {
         if (bool) {
           action = 'C'
@@ -180,46 +193,64 @@ const CheckMixin = {
           action = 'N'
         }
       }
-      switch (tv.detailType) {
-        case 'CHECK_DOC_TASK':url = host + 'wxservice/approveDoc';
-                              data = {
-                                workid: dd.taskid,
-                                activeId: st.activeid,
-                                docNum: dd.docNum,
-                                docVer: dd.docVer,
-                                action,
-                                description: approveDescription
-                              };
-                              break;
-        case 'CHECK_BOM_TASK':url = host + 'wxservice/approveBomDesign';
-                              data = {
-                                workid: dd.taskid,
-                                activeId: st.activeid,
-                                bomname: dd.bomName,
-                                bomver: dd.bomVer,
-                                partid: dd.materialNum,
-                                partver: dd.materialVer,
-                                action,
-                                description: approveDescription
-                              };
-                              break;
-        case 'CHECK_CHGAPP_TASK':url = host + 'wxservice/approveChgApply';
-                              data = {
-                                workid: dd.taskid,
-                                activeId: st.activeid,
-                                action,
-                                description: approveDescription
-                              };
-                              break;
-        case 'CHECK_CHG_TASK':url = host + 'wxservice/approveChg';
-                              data = {
-                                workid: dd.taskid,
-                                activeId: st.activeid,
-                                action,
-                                description: approveDescription
-                              };
-                              break;
+      if (this.isMultipleCheck) {
+        // 批量审批
+        url = host + 'wxservice/doMultiProceedTask';
+        let result = "";
+        tv.selectedTasks.forEach(item=>{
+          result += "<work><workid>"+item.taskid+"</workid>";
+          result += "<billtypename>"+item.tasktypename+"</billtypename>";
+          result += "<activeid>"+item.activeid+"</activeid>";
+          result += "<billobjectkey>"+decodeURI(tv._multipleCheckGenerateBillobjectkey(item).replace(/\\"/g,"\'"))+"</billobjectkey>";
+          result += "<userid>"+item.personid+"</userid>";
+          result += "<action>"+action+"</action>";
+          result += "<description>"+approveDescription+"</description></work>";
+        })
+        data = result
+      } else {
+        // 单一审批
+        switch (tv.detailType) {
+          case 'CHECK_DOC_TASK':url = host + 'wxservice/approveDoc';
+                                data = {
+                                  workid: dd.taskid,
+                                  activeId: st.activeid,
+                                  docNum: dd.docNum,
+                                  docVer: dd.docVer,
+                                  action,
+                                  description: approveDescription
+                                };
+                                break;
+          case 'CHECK_BOM_TASK':url = host + 'wxservice/approveBomDesign';
+                                data = {
+                                  workid: dd.taskid,
+                                  activeId: st.activeid,
+                                  bomname: dd.bomName,
+                                  bomver: dd.bomVer,
+                                  partid: dd.materialNum,
+                                  partver: dd.materialVer,
+                                  action,
+                                  description: approveDescription
+                                };
+                                break;
+          case 'CHECK_CHGAPP_TASK':url = host + 'wxservice/approveChgApply';
+                                data = {
+                                  workid: dd.taskid,
+                                  activeId: st.activeid,
+                                  action,
+                                  description: approveDescription
+                                };
+                                break;
+          case 'CHECK_CHG_TASK':url = host + 'wxservice/approveChg';
+                                data = {
+                                  workid: dd.taskid,
+                                  activeId: st.activeid,
+                                  action,
+                                  description: approveDescription
+                                };
+                                break;
+        }
       }
+      
       // 提交任务
       const requestObj = {
           url,
@@ -228,25 +259,35 @@ const CheckMixin = {
       }
       tv.$vux.loading.show()
       request(requestObj).then(function (data) {
-          if (data.status === 200) {
-            if (data.data[0].tranflag !== '-1') {
-              tv.$vux.toast.show({
-               text: '处理成功',
-               onHide: tv.finishTask()
-              })
-            } else {
-              tv.httpError = {
-                show: true,
-                msg: data.data[0].description
+        tv.$vux.loading.hide()
+        if (data.status === 200) {
+          let des = [];
+          data.data.forEach(function(item){
+              if(item.tranflag != 0){
+                /*des.push(tv.selectedTasks.filter(jtem=>{
+                  return item.workid === jtem.taskid
+                }).taskname)*/
+                des.push(item.description)
               }
-            }
-          }else {
+          })
+          if (des.length > 0) {
             tv.httpError = {
               show: true,
-              msg: data.error.message
+              msg: des.join('、')
             }
+          } else {
+            tv.$vux.toast.show({
+             text: '处理成功',
+             onHide: tv.finishTask(),
+             time: 2000
+            })
           }
-          tv.$vux.loading.hide()
+        }else {
+          tv.httpError = {
+            show: true,
+            msg: data.error.message
+          }
+        }
       }).catch(function (error) {
           console.log(error)
       })
@@ -254,40 +295,68 @@ const CheckMixin = {
     /* 4 提交转发, 结束审批 */
     submitTrans: function (des, selectedPersonId) {
       const tv = this
-      const requestObj = {
-          url: host + 'wxservice/single/trancheckstask', //单一任务转发
-          method: 'post',
-          data: {
+      let url = '', data
+      if (this.isMultipleCheck) {
+        // 批量审批
+        url = host + 'wxservice/trancheckstask';
+        let result = "";
+        tv.selectedTasks.forEach(item=>{
+          result += "<work><id>"+item.taskid+"</id>";
+          result += "<type>"+item.tasktype+"</type>";
+          result += "<personid>"+item.personid+"</personid>";
+          result += "<trpersonid>"+selectedPersonId+"</trpersonid>";
+          result += "<tranReason>"+des+"</tranReason>";
+          result += "<receivetime>"+item.receivetime+"</receivetime>";
+          result += "<activeid>"+item.activeid+"</activeid></work>";
+        })
+        data = result
+      } else {
+        url = host + 'wxservice/single/trancheckstask';
+        data = {
             taskId: tv.detailsData.taskid,
             type: tv.detailType,
             trpersonid: selectedPersonId,
             tranReason: des,
             receivetime: tv.selectedTasks[0].receivetime,
             activeid: tv.selectedTasks[0].activeid
-          }
+        }
+      }
+      const requestObj = {
+          url,
+          method: 'post',
+          data
       }
       tv.$vux.loading.show()
       request(requestObj).then(function (data) {
-          if (data.status === 200) {
-            //单一审批
-            if (data.data[0].tranflag !== '-1') {
-              tv.$vux.toast.show({
-               text: '转发成功',
-               onHide: tv.finishTask()
-              })
-            } else {
-              tv.httpError = {
-                show: true,
-                msg: data.data[0].description
+        tv.$vux.loading.hide()
+        if (data.status === 200) {
+          let des = [];
+          data.data.forEach(function(item){
+              if(item.tranflag != 0){
+                /*des.push(tv.selectedTasks.filter(jtem=>{
+                  return item.workid === jtem.taskid
+                }).taskname)*/
+                des.push(item.description)
               }
-            }
-          }else {
+          })
+          if (des.length > 0) {
             tv.httpError = {
               show: true,
-              msg: data.error.message
+              msg: des.join('、')
             }
+          } else {
+            tv.$vux.toast.show({
+             text: '转发成功',
+             onHide: tv.finishTask(),
+             time: 2000
+            })
           }
-          tv.$vux.loading.hide()
+        }else {
+          tv.httpError = {
+            show: true,
+            msg: data.error.message
+          }
+        }
       }).catch(function (error) {
           console.log(error)
       })
@@ -303,6 +372,7 @@ const CheckMixin = {
         checkModalStatus: false,
         doTransfor: false
       }
+      this.isMultipleCheck = false
     },
     /* 
      * 7 批量审批开始
@@ -317,7 +387,6 @@ const CheckMixin = {
      */
     multipleCheckStart: function () {
       const tv = this
-      let isSameTasks = true
       // 封装 selectedTasks 信息
       if (tv.taskListData && tv.taskListData.CheckTask) {
         tv.selectedTasks = tv.mutipleListValue.map(item => {
@@ -325,20 +394,14 @@ const CheckMixin = {
             return jtem.taskid === item
           })[0]
         })
-        // 验证是否是同一任务类型
-        for(let i=1;i<tv.selectedTasks.length;i++) {
-          if (tv.selectedTasks[i].tasktype !== tv.selectedTasks[i-1].tasktype) {
-            isSameTasks = false
-          }
-        }
-        if (isSameTasks) {
-          tv.goCheckModal()
-        } else {
+        if (tv.selectedTasks.length < 1) {
           tv.httpError = {
             show: true,
-            msg: '请选择相同类型任务'
+            msg: '当前无需要审签的任务'
           }
+          return false;
         }
+        tv.goCheckModal()
       } else {
         tv.multipleCheckCancle()
       }
@@ -351,6 +414,44 @@ const CheckMixin = {
       tv.selectedTasks = []
       tv.mutipleListValue = []
       tv.isMultipleCheck = false
+    },
+    // 10 验证任务是否全部类型相同
+    _multipleCheckIsSame: function () {
+      const tv = this
+      let isSameTasks = true
+      // 验证是否是同一任务类型
+      for(let i=1;i<tv.selectedTasks.length;i++) {
+        if (tv.selectedTasks[i].tasktype !== tv.selectedTasks[i-1].tasktype) {
+          isSameTasks = false
+        }
+      }
+      return isSameTasks
+    },
+    // 11 批量审批 生成key
+    _multipleCheckGenerateBillobjectkey: function (taskInfo){
+      if(typeof(taskInfo)!='object'){return '';}
+      let billobjectkey = '';
+      /*taskInfo.bomName = taskInfo.bomName.replace(/'/g,"/'");
+      taskInfo.bomName = encodeURI(taskInfo.bomName);*/
+      switch(taskInfo.tasktype) {
+        case 'CHECK_DOC_TASK' : billobjectkey += taskInfo.tasktypename + '$$$';
+                    billobjectkey += taskInfo.documentId + '$$$';
+                    billobjectkey += taskInfo.documentVer;
+                    break;
+        case 'CHECK_BOM_TASK' : billobjectkey += taskInfo.tasktypename + '$$$';
+                    billobjectkey += taskInfo.bomName + '$$$';
+                    billobjectkey += taskInfo.partId + '$$$';
+                    billobjectkey += taskInfo.partVer + '$$$';
+                    billobjectkey += taskInfo.bomVer;
+                    break;
+        case 'CHECK_CHG_TASK' : billobjectkey += taskInfo.tasktypename + '$$$129';
+                    break;
+        case 'CHECK_CHGAPP_TASK' : billobjectkey += taskInfo.tasktypename + '$$$85';
+                    break;
+        default : ;
+      }
+      billobjectkey = encodeURI(billobjectkey).replace(/'/g,'\\"')
+      return billobjectkey;
     }
   }
 }
