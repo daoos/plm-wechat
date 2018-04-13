@@ -248,7 +248,7 @@ export default {
     },
     /* 前往任务列表 */
     goTaskList: function () {
-      window.location.href = "/totaskpage"
+      window.location.href = "/redirectToTaskList?userWxh=" + urlGetParamsForObject(window.location.href).userWxh
     }
   },
   mounted: function () {
