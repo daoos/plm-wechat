@@ -14,7 +14,7 @@
  *     show: false,
  *     msg: ''
  *   },
- *   taskListData: {CheckTask: []}, // 当前任务简要信息列表集合，用于批量审批
+ *   taskListData: {CheckTask: []}, // 当前任务简要信息列表集合，用于批量审批，单一审批不必传入
  *   detailsData: {}, // 单一任务详情
  *   selectedTasks: [], // 选中任务简要信息列表，如果单一任务，则 length = 1
  *   detailType: '' // 当前任务类型

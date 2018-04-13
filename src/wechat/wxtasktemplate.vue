@@ -130,7 +130,7 @@ export default {
             })
             tv.getbomstructuretable(data.data)
           } else if (data.data.taskTypes === 'CHECK_BOM_TASK') {
-            //变更申请审批
+            //设计BOM审批
             tv.getbomdesignworkflow({
               activeid: obj.activeid,
               ...data.data
@@ -143,11 +143,13 @@ export default {
             tv.$vux.loading.hide()
           }
         } else {
-          tv.httpError = {
-            show: true,
-            msg: '服务器返回数据格式错误'
-          }
           tv.$vux.loading.hide()
+          tv.$vux.toast.show({
+             text: '服务器返回数据格式错误',
+             onHide: tv.goTaskList(),
+             time: 2000,
+             type: 'warn'
+          })
         }
       }).catch(function (error) {
         console.log(error)
@@ -239,6 +241,14 @@ export default {
       }).catch(function (error) {
         console.log(error)
       })
+    },
+    /* 当加入审批mixin时, 需要的必须函数 */
+    afterCheck: function () {
+      this.goTaskList()
+    },
+    /* 前往任务列表 */
+    goTaskList: function () {
+      window.location.href = "/totaskpage"
     }
   },
   mounted: function () {
