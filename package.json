@@ -4,6 +4,7 @@
   "description": "practice for webpack",
   "dependencies": {
     "axios": "^0.18.0",
+    "better-scroll": "^1.9.1",
     "hyj-func": "^1.2.0",
     "js-base64": "^2.4.3",
     "vue": "^2.5.16",

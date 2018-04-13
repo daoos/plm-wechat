@@ -48,6 +48,10 @@ const webpackConfig = {
         use: [ 'style-loader', 'css-loader' ]
       },
       {
+        test: /\.less$/,
+        use: [ 'style-loader', 'css-loader', 'less-loader' ]
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -83,5 +87,11 @@ const webpackConfig = {
 };
 
 module.exports = vuxLoader.merge(webpackConfig, {
-  plugins: ['vux-ui']
+  plugins: [
+    'vux-ui',
+    {
+      name: 'less-theme',
+      path: 'src/styles/theme.less'
+    }
+  ]
 })

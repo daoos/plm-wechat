@@ -18,6 +18,7 @@
     <group>
       <x-button type="warn" @click.native="formCheck">绑定</x-button>
     </group>
+    <div style="text-align: right;padding: 20px 10px;"><img :src="Logo" alt="logo"></div>
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import { XInput, Group, XButton, PopupPicker } from 'vux'
 import wx from 'weixin-js-sdk'
 import request from '../utils/request.js'
 import {host} from '../utils/config.js'
+import Logo from '../img/logo.png'
 
 let userWx = ''
 
@@ -43,6 +45,7 @@ export default {
   },
   data () {
     return {
+      Logo,
       formItem: {
         provinceid: [],
         cityid: [],

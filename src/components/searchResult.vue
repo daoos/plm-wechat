@@ -1,18 +1,6 @@
 <!-- 查询结果 -->
 <template>
-  <div class="hello">
-    <!-- <div>
-      <card>
-        <div slot="content" class="result-card">
-          <p slot="header">文档名称: </p>
-          <p>文档编码: </p>
-          <p>创建人: </p>
-          <p>版本: </p>
-          <p><x-button type="warn" mini>详情</x-button></p>
-          <p></p>
-        </div>
-      </card>
-    </div> -->
+  <div class="searchResultBox" ref="scrollWrapper">
     <div v-if="resultType === 'doc'">
       <HyjTimeBox v-for="list in lists" :key="list.docNum+'_'+list.docVer">
         <div class="hyj-timehead" slot="hyj-timehead">{{list.createTime}}</div>
@@ -65,6 +53,7 @@
 
 <script>
 import { Divider, Card, XButton, Group, Cell } from 'vux'
+import BScroll from 'better-scroll'
 import HyjTimeBox from '../components/HyjTimeBox'
 
 export default {
@@ -81,6 +70,10 @@ export default {
     resultType: {
       type: String,
       required: true
+    },
+    submit: {
+      type: Function,
+      required: true
     }
   },
   components: {
@@ -95,11 +88,58 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  mounted: function () {
+    if (!this.scroll) {
+      this.$nextTick(() => {
+        window.scrollTo(0,0)//用以解决加载、卸载的先后问题，保证 BScroll 在合适的滚动位置实例化
+        this.scroll = new BScroll(this.$refs.scrollWrapper, {
+          pullUpLoad: {
+            threshold: 50
+          },
+          preventDefaultException: {
+            className:/(^|\s)detailInfoBtn(\s|$)/
+          }
+        })
+        this.scroll.once('refresh', () => {
+          if (sessionStorage.getItem('scrollY') < -10) {
+            console.log('once',this.scroll, sessionStorage.getItem('scrollY'))
+            // window.scrollTo(0,sessionStorage.getItem('scrollY'))
+            this.scroll.scrollTo(0,+sessionStorage.getItem('scrollY'))
+            this.scroll.refresh()
+          }
+        })
+        this.scroll.on('pullingUp', (pos) => {
+          this.submit()
+        })
+        this.scroll.on('scrollEnd', (pos) => {
+          // if (this.scroll.y < this.scroll.maxScrollY) {
+          //   this.scroll.scrollTo(0,sessionStorage.getItem('scrollY'))
+          // }
+          console.log(this.scroll.y, sessionStorage.getItem('scrollY'))
+        })
+      })
+    }
+  },
+  updated: function () {
+    if (this.scroll) {
+      this.scroll.finishPullUp()
+      // this.scroll.refresh()
+    }
+  },
+  beforeDestroy: function () {
+    if (this.scroll) {
+      sessionStorage.setItem('scrollY', this.scroll.y)
+      this.scroll.destroy()
+    }
   }
 }
 </script>
 
 <style scoped>
+  .searchResultBox {
+    height: 100vh;
+  }
   .time{
     font-size: 14px;
     font-weight: bold;

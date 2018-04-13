@@ -55,6 +55,7 @@
           <li v-for="item in taskListData.FAFANG_NOTICE" taskCategory="FAFANG_NOTICE" :detailType="item.tasktype" :taskid="item.taskid">{{item.infoObj.docid}}&nbsp;,&nbsp;{{item.infoObj.docname}}&nbsp;,&nbsp;{{item.infoObj.docver}}&nbsp;&nbsp;发放文档</li>
         </ul>
       </group>
+      <div style="text-align: right;padding: 20px 10px;"><img :src="Logo" alt="logo"></div>
     </div>
     <div v-if="currentStatus === 'onlyDetails'">
       <div class="backbtn" @click="backUp('taskList')"></div>
@@ -87,8 +88,8 @@
         <div slot="footer"></div>
     </x-dialog> -->
     <div v-if="isMultipleCheck" class="multipleCheckBtn">
-      <x-button type="primary" @click.native="multipleCheckStart">批量审批</x-button>
-      <x-button type="warn" @click.native="multipleCheckCancle">取消</x-button>
+      <x-button type="warn" @click.native="multipleCheckStart">批量审批</x-button>
+      <x-button type="default" @click.native="multipleCheckCancle">取消</x-button>
     </div>
   </div>
 </template>
@@ -130,6 +131,7 @@ import Details from '../components/details'
 import TimeLineBox from '../components/TimeLineBox'
 import request from '../utils/request.js'
 import {host} from '../utils/config.js'
+import Logo from '../img/logo.png'
 
 export default {
   name: 'TaskList',
@@ -150,6 +152,7 @@ export default {
   mixins: [CheckMixin, DocMixin],
   data () {
     return {
+      Logo,
       httpError: { //popup 展示网络请求数据错误
         show: false,
         msg: ''

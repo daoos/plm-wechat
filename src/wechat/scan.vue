@@ -9,7 +9,7 @@
       {{scanDefaultInfo.content}}
     </div>
     <div v-if="currentStatus === 'searchResult'">
-      <SearchResult :goDetail="goDetail" :lists="searchResultData" :resultType="searchType" />
+      <SearchResult :goDetail="goDetail" :submit="getResultList" :lists="searchResultData" :resultType="searchType" />
     </div>
     <div v-if="currentStatus === 'details'">
       <div class="backbtn" @click="backUp('searchResult')"></div>
@@ -103,6 +103,7 @@ export default {
         apply: 2,
         task: 3
       },
+      searchPage: 1,//当前查询页
       searchResultData: [],
       detailType: '', // 详情类型
       selectedTasks: [], // 选中任务简要信息列表，如果单一任务，则 length = 1
@@ -113,16 +114,15 @@ export default {
     /*
      * 入口一: 进入查询结果列表页
      * 提交查询信息, 并进入查询结果界面
-     * @require obj 查询信息
      */
-    getResultList: function (obj) {
+    getResultList: function () {
       const tv = this
       const requestObj = {
         url: host + 'wxservice/wxsearchquery',
         method: 'post',
         data: {
-          index: 1,
-          myObj: JSON.stringify(obj),
+          index: tv.searchPage,
+          myObj: JSON.stringify(tv.scanEnterInfo),
           tabIndex: tv.searchTypeIndex[tv.searchType]
         }
       }
@@ -130,8 +130,18 @@ export default {
       request(requestObj).then(function (data) {
         tv.$vux.loading.hide()
         if (data.status === 200 && Array.isArray(data.data)) {
-          tv.searchResultData = data.data
-          tv.currentStatus = 'searchResult'
+          if (data.data.length > 0) {
+            tv.searchResultData = tv.searchResultData.concat(data.data)
+            tv.searchPage += 1
+          }
+          //首次加载，跳转到列表页
+          if (tv.searchPage === 2 && data.data.length > 0) {tv.backUp('searchResult')}
+          if (data.data.length === 0) {
+            tv.httpError = {
+              show: true,
+              msg: '数据已加载完全'
+            }
+          }
           if (data.data.length < 1) {
             tv.scanDefaultInfo = {
               content: '数据获取失败'
@@ -361,22 +371,22 @@ export default {
     switch(obj.rettype) {
       case 'doc': tv.searchType = 'doc';
                   if (+(obj.signing) === 0) {
-                    tv.getResultList(obj)
+                    tv.getResultList()
                   } else {
                     tv.currentStatus = 'onlyDetails'
                     tv.getDetails(obj)
                   }
                   break;
       case 'mat': tv.searchType = 'matter';
-                  tv.getResultList(obj)
+                  tv.getResultList()
                   break;
       case 'apply': tv.searchType = 'apply';
-                    tv.getResultList(obj)
+                    tv.getResultList()
                     /*tv.currentStatus = 'onlyDetails';
                     tv.getDetails(obj)*/
                     break;
       case 'task': tv.searchType = 'task';
-                   tv.getResultList(obj)
+                   tv.getResultList()
                    /*tv.currentStatus = 'onlyDetails';
                    tv.getDetails(obj)*/
                    break;
