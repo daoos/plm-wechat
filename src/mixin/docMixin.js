@@ -109,7 +109,7 @@ const DocMixin = {
       } else {
         tv.httpError = {
           show: true,
-          msg: '获取下载信息失败'
+          msg: tv.downloadFileInfo.message&&tv.downloadFileInfo.message.length>0?tv.downloadFileInfo.message:'获取下载信息失败' || '获取下载信息失败'
         }
       }
     },
