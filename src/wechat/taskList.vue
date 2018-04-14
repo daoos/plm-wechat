@@ -212,12 +212,14 @@ export default {
           })
           // 设置批量审批选项值
           if (tv.mutipleList) {
-            tv.mutipleList = Object.keys(result.CheckTask).map(ktem=>{
-              return {
-                key: ktem,
-                value: result.CheckTask[ktem].checkobject + '&nbsp;&nbsp;' + result.CheckTask[ktem].taskname
-              }
-            })
+            if (typeof(result.CheckTask) !== 'undefined') {
+              tv.mutipleList = Object.keys(result.CheckTask).map(ktem=>{
+                return {
+                  key: ktem,
+                  value: result.CheckTask[ktem].checkobject + '&nbsp;&nbsp;' + result.CheckTask[ktem].taskname
+                }
+              })
+            }
           }
         } else {
           tv.httpError = {
