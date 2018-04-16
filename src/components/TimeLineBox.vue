@@ -37,7 +37,7 @@ export default {
 
 <style scoped>
 .timelineBox {
-  padding: 10px 90px;
+  padding: 10px 80px;
 }
 h4 {
   color: #666;

@@ -1,6 +1,6 @@
 <template>
   <div class="details">
-    <div v-if="detailType === 'doc'">
+    <div v-if="detailType === 'doc' || detailType === 'chgNotifyDetails' || detailType === 'chgApplyBookDetails'">
       <header>{{detailInfo.docName}}</header>
       <ul>
         <li><span class="texttitle">文档编码:</span> {{detailInfo.docNum}}</li>

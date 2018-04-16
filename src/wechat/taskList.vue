@@ -62,10 +62,26 @@
       <Details :detailType="detailType" :detailInfo="detailsData" />
       <TimeLineBox :workFlowInfo="workFlowInfo" />
       <div class="detailFooterBtn">
-        <x-button type="primary" v-if="detailType === 'CHECK_DOC_TASK'" @click.native="fileDownload">下载{{downloadFileInfo.message}}</x-button>
-        <x-button type="primary" mini v-if="detailType === 'CHECK_CHG_TASK'" @click.native="getchgnotifylist" disabled>变更通知</x-button>
-        <x-button type="primary" mini v-if="detailType === 'CHECK_BOM_TASK'" @click.native="fileDownload" disabled>结构</x-button>
+        <x-button type="primary" v-if="downloadFileInfo.code === 'S'" @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button>
+        <x-button type="primary" v-if="detailType === 'CHECK_CHG_TASK'" @click.native="_getChgNotifyList(detailsData)">变更通知</x-button>
+        <x-button type="primary" v-if="detailType === 'CHECK_BOM_TASK'" @click.native="_getbomstructuretable(detailsData)">结构</x-button>
+        <x-button type="primary" v-if="detailType === 'CHECK_CHGAPP_TASK'" @click.native="_getChgApplyBook(detailsData)">变更申请书</x-button>
         <x-button type="warn" v-if="detailType.indexOf('CHECK') > -1" @click.native="goCheckModal">审批</x-button>
+      </div>
+    </div>
+
+    <div v-if="currentStatus === 'chgNotifyDetails'">
+      <div class="backbtn" @click="backUp('onlyDetails')"></div>
+      <Details detailType="chgNotifyDetails" :detailInfo="chgNotifyListDetail" />
+      <div class="detailFooterBtn">
+        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="chgFileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
+      </div>
+    </div>
+    <div v-if="currentStatus === 'chgApplyBookDetails'">
+      <div class="backbtn" @click="backUp('onlyDetails')"></div>
+      <Details detailType="chgNotifyDetails" :detailInfo="chgApplyBookDetail" />
+      <div class="detailFooterBtn">
+        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="chgFileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
       </div>
     </div>
     <x-dialog
@@ -81,12 +97,35 @@
         <Transfer :modalCancel="modalCancel" :doTransforModal="modalStatus.doTransfor" :transforPersonList="transforPersonList" :submitTrans="submitTrans" />
         <div slot="footer"></div>
     </x-dialog>
-    <!-- <x-dialog
+    <x-dialog
         v-model="bomStructureModalStatus"
+        class="bomStructureModal"
+        hide-on-blur
         title="BOM结构">
-        BOM结构
-        <div slot="footer"></div>
-    </x-dialog> -->
+        <div v-if="bomStructuresDatas.length>0" class="bomStructureXTable" style="padding:60px 2px;">
+          <x-table full-bordered style="background-color:#fff;">
+            <thead>
+              <tr style="background-color: #F7F7F7">
+                <th>物料编码</th>
+                <th>物料版本</th>
+                <th>物料名称</th>
+                <th>BOM数量</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in bomStructuresDatas">
+                <td>{{item.freeitem2}}</td>
+                <td>{{item.freeitem3}}</td>
+                <td>{{item.freeitem1}}</td>
+                <td>{{item.freeitem4}}</td>
+              </tr>
+            </tbody>
+          </x-table>
+        </div>
+        <div v-if="bomStructuresDatas.length === 0" class="detailXTable" style="padding:0 15px;">
+          数据为空
+        </div>
+    </x-dialog>
     <div v-if="isMultipleCheck" class="multipleCheckBtn">
       <x-button type="warn" @click.native="multipleCheckStart">批量审批</x-button>
       <x-button type="default" @click.native="multipleCheckCancle">取消</x-button>
@@ -97,8 +136,10 @@
 <script>
 /*
  * @currentStatus 界面切换
- * taskList: 任务列表
- * onlyDetails: 任务详情
+ * currentStatus-taskList: 任务列表
+ * currentStatus-onlyDetails: 任务详情
+ * currentStatus-chgNotifyDetails: 变更通知详情
+ * currentStatus-chgApplyBookDetails: 变更申请书详情
  * designer: heyunjiang
  * time: 2018.3.22
  */
@@ -121,7 +162,7 @@
  * CHANGE_LISTENER
  * FAFANG_NOTICE
  */
-import { Group, Cell, CellBox, Popup, Icon, XButton, XDialog, Checklist } from 'vux'
+import { Group, Cell, CellBox, Popup, Icon, XButton, XDialog, Checklist, XTable } from 'vux'
 import { downloadFileForUrl } from 'hyj-func'
 import CheckMixin from '../mixin/checkMixin'
 import DocMixin from '../mixin/docMixin'
@@ -147,7 +188,8 @@ export default {
     XDialog,
     TaskCheck,
     Transfer,
-    Checklist
+    Checklist,
+    XTable
   },
   mixins: [CheckMixin, DocMixin],
   data () {
@@ -172,8 +214,7 @@ export default {
         FAFANG_NOTICE: []
       },
       detailsData: {}, //任务详细数据
-      selectedTasks: [], //当前选中任务(任务概要信息，设为数组，方便后期批量审批扩展)
-      bomStructureModalStatus: false //BOM结构展示
+      selectedTasks: [] //当前选中任务(任务概要信息，设为数组，方便后期批量审批扩展)
     }
   },
   methods: {
@@ -256,32 +297,35 @@ export default {
       request(requestObj).then(function (data) {
         if (data.status === 200 && typeof(data.data) === 'object' && data.data !== null) {
           tv.detailsData = data.data
-          if (data.data.taskTypes === 'CHECK_DOC_TASK') {
-            //文档审批
-            tv.getdocworkflow({
-              activeid: obj.activeid,
-              ...data.data
-            })
-            tv.downloadvalidate(data.data)
-          } else if (data.data.taskTypes === 'CHECK_CHG_TASK') {
-            //变更申请审批
-            tv.getchgworkflow({
-              activeid: obj.activeid,
-              ...data.data
-            })
-            tv.getbomstructuretable(data.data)
-          } else if (data.data.taskTypes === 'CHECK_BOM_TASK') {
-            //变更申请审批
-            tv.getbomdesignworkflow({
-              activeid: obj.activeid,
-              ...data.data
-            })
-          } else {
-            tv.workFlowInfo = {
-              code: 'F',
-              list: []
-            }
-            tv.$vux.loading.hide()
+          switch(data.data.taskTypes) {
+            case 'CHECK_DOC_TASK':tv.getdocworkflow({
+                                    activeid: obj.activeid,
+                                    ...data.data
+                                  })
+                                  tv.downloadvalidate(data.data)
+                                  break;
+            case 'CHECK_BOM_TASK':tv.getbomdesignworkflow({
+                                    activeid: obj.activeid,
+                                    ...data.data
+                                  })
+                                  break;
+            case 'CHECK_CHG_TASK':tv.getchgworkflow({
+                                    activeid: obj.activeid,
+                                    ...data.data
+                                  })
+                                  break;
+            case 'CHECK_CHGAPP_TASK':tv.getchgapplyworkflow({
+                                      activeid: obj.activeid,
+                                      ...data.data
+                                    })
+                                    break;
+            case 'FAFANG_NOTICE':tv.downloadvalidate(data.data);break;
+            case 'CHANGE_LISTENER':tv.downloadvalidate(data.data);break;
+            default:  tv.workFlowInfo = {
+                        code: 'F',
+                        list: []
+                      }
+                      tv.$vux.loading.hide()
           }
         } else {
           tv.httpError = {
@@ -294,119 +338,7 @@ export default {
         console.log(error)
       })
     },
-    /* 
-     * 3.2 获取变更申请流程详情
-     * @require obj 任务详细信息 + activeid
-     * 通过任务详情，获取对应流程详情
-     */
-    getchgworkflow: function (obj) {
-      if(typeof(obj) === 'undefined') {return ;}
-      const tv = this
-      /* 获取任务详情信息 */
-      const requestObj = {
-        url: host + 'wxservice/getchgworkflow',
-        method: 'post',
-        data: {
-          activeid: obj.activeid,
-          workid: obj.taskid,
-        }
-      }
-      request(requestObj).then(function (data) {
-        if (data.status === 200) {
-          tv.workFlowInfo = data.data
-        }
-        tv.$vux.loading.hide()
-      }).catch(function (error) {
-        console.log(error)
-      })
-    },
-    /* 
-     * 3.2.1 获取变更通知
-     * 通过任务详情，获取对应变更通知详情
-     */
-    getchgnotifylist: function () {
-      const tv = this
-      /* 获取任务详情信息 */
-      const requestObj = {
-        url: host + 'wxservice/chgnotifylist',
-        method: 'post',
-        data: {
-          id: tv.detailsData.taskid,
-        }
-      }
-      tv.$vux.loading.show()
-      request(requestObj).then(function (data) {
-        tv.$vux.loading.hide()
-        if (data.status === 200) {
-          Modal.info(data.data)
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
-    },
-    /* 
-     * 3.3 获取BOM审批流程详情
-     * @require obj 任务详细信息 + activeid
-     * 通过任务详情，获取对应流程详情
-     */
-    getbomdesignworkflow: function (obj) {
-      if(typeof(obj) === 'undefined') {return ;}
-      const tv = this
-      /* 获取任务详情信息 */
-      const requestObj = {
-        url: host + 'wxservice/getbomdesignworkflow',
-        method: 'post',
-        data: {
-          activeid: obj.activeid,
-          bomname: obj.bomname,
-          bomver: obj.bomver,
-          partid: obj.partid,
-          partver: obj.partver,
-          workid: obj.taskid,
-        }
-      }
-      request(requestObj).then(function (data) {
-        if (data.status === 200) {
-          tv.workFlowInfo = data.data
-        }
-        tv.$vux.loading.hide()
-      }).catch(function (error) {
-        console.log(error)
-      })
-    },
-    /* 
-     * 3.3.1 获取BOM结构
-     * 通过任务详情，获取对应变BOM结构
-     */
-    getbomstructuretable: function (obj) {
-      if(typeof(obj) === 'undefined') {return ;}
-      const tv = this
-      /* 获取任务详情信息 */
-      const requestObj = {
-        url: host + 'wxservice/getbomstructuretable',
-        method: 'post',
-        data: {
-          bomname: obj.bomname,
-          bomver: obj.bomver,
-          partid: obj.partid,
-          partver: obj.partver
-        }
-      }
-      request(requestObj).then(function (data) {
-        if (data.status === 200) {
-          tv.bomStructure = data.data
-        }
-        tv.$vux.loading.hide()
-      }).catch(function (error) {
-        console.log(error)
-      })
-    },
-    /* 3.3.2 打开BOM结构模态框 */
-    goBomStructure: function () {
-      const tv = this
-      tv.bomStructureModalStatus = true
-    },
-    /* 前往任务详情 */
+    /* 3 前往任务详情 */
     goDetail: function (e) {
       if (this.isMultipleCheck) {return ;}
       const li = e.target
@@ -429,6 +361,7 @@ export default {
         tv.getDetails(currentLi)
       }
     },
+
     /* 当加入审批mixin时, 需要的必须函数 */
     afterCheck: function () {
       this.currentStatus = 'taskList'
@@ -558,5 +491,9 @@ export default {
 .multipleCheckBtn {
   margin-top: 20px;
   padding: 0 10px;
+}
+.bomStructureModal .weui-dialog {
+  width: 100%;
+  max-width: 100%;
 }
 </style>
