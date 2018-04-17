@@ -62,7 +62,7 @@
     <div v-if="currentStatus === 'details'">
       <div class="backbtn" @click="backUp('searchResult')"></div>
       <Details :detailType="activeTabIndex[activeTab]" :detailInfo="detailsData" />
-      <div style="padding: 10px;"><x-button v-if="activeTab === 0" type="warn"  @click.native="fileDownload">下载</x-button></div>
+      <div style="padding: 10px;"><x-button v-if="activeTab === 0" type="warn"  @click.native="fileDownload(downloadFileInfo)">下载</x-button></div>
     </div>
   </div>
 </template>

@@ -26,6 +26,7 @@ export default {
   mounted: function(){
     if (navigator.userAgent.indexOf('MicroMessenger') === -1) {
       const downloadUrl = document.location.search.slice(1).split('=')[1]
+      console.log(downloadUrl)
       downloadFileForUrl(this.b64DecodeUnicode(decodeURIComponent(downloadUrl)))
     }
   }
