@@ -15,7 +15,7 @@ const webpackConfig = {
     search: './src/search.js',
     scan: './src/scan.js',
     wxtasktemplate: './src/wxtasktemplate.js',
-    download: './src/download.js'
+    wxdownload: './src/download.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
