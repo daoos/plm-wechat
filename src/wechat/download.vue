@@ -27,7 +27,8 @@ export default {
     if (navigator.userAgent.indexOf('MicroMessenger') === -1) {
       const downloadUrl = document.location.search.slice(1).split('=')[1]
       console.log(downloadUrl)
-      downloadFileForUrl(this.b64DecodeUnicode(decodeURIComponent(downloadUrl)))
+      // downloadFileForUrl(this.b64DecodeUnicode(decodeURIComponent(downloadUrl)))
+      downloadFileForUrl(atob(decodeURIComponent(downloadUrl)))
     }
   }
 }
