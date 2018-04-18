@@ -153,6 +153,7 @@ export default {
       request(requestObj).then(function (data) {
         if (data.status === 200 && typeof(data.data) === 'object' && data.data !== null) {
           tv.detailsData = data.data
+          tv.detailType = data.data.taskTypes
           switch(data.data.taskTypes) {
             case 'CHECK_DOC_TASK':tv.getdocworkflow({
                                     activeid: obj.activeid,

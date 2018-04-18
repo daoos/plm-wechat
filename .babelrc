@@ -4,5 +4,5 @@
     ["import", {
       "libraryName": "iview",
       "libraryDirectory": "src/components"
-    }]],
+    }], "transform-decorators"],
 }
