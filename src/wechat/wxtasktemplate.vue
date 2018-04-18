@@ -157,6 +157,7 @@ export default {
           const arr = []
           arr.push(obj)
           tv.selectedTasks = arr
+          console.log('1', arr, tv.selectedTasks)
           switch(data.data.taskTypes) {
             case 'CHECK_DOC_TASK':tv.getdocworkflow({
                                     activeid: obj.activeid,

@@ -79,6 +79,7 @@ const CheckMixin = {
                                  billtypename = '变更审签任务';
                                  break;
         }
+        console.log('2', tv.selectedTasks, tv.selectedTasks[0])
         // 单一审批
         const requestObj = {
           url: host + 'wxservice/getApproveInfo',
