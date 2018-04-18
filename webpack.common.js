@@ -14,7 +14,7 @@ const webpackConfig = {
     unbinduser: './src/unBindUser.js',
     search: './src/search.js',
     scan: './src/scan.js',
-    wxtasktemplate: './src/wxtasktemplate.js',
+    wxtemplatenotice: './src/wxtasktemplate.js',
     wxdownload: './src/download.js'
   },
   output: {
