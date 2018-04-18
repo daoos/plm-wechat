@@ -24,6 +24,9 @@ export default {
     }
   },
   mounted: function(){
+    /*const [a, b, c, d, e] = 'hello';
+    console.log(a, b, c, d, e)
+    return ;*/
     if (navigator.userAgent.indexOf('MicroMessenger') === -1) {
       const downloadUrl = document.location.search.slice(1).split('=')[1]
       console.log(downloadUrl)
