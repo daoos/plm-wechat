@@ -136,7 +136,7 @@ export default {
      * @require obj 任务概略信息
      */
     getDetails: function(obj){
-      /* 单纯获取任务详情信息, 不控制进入查询结果界面 */
+      /* 单纯获取任务详情信息 */
       const tv = this
       const requestObj = {
         url: host + 'wxservice/gettaskdetail',

@@ -7,7 +7,7 @@
     </popup>
     <div v-if="currentStatus === 'taskList'" class="taskList">
       <group>
-        <v-touch v-on:pressup="multipleCheck">
+        <v-touch v-on:press="multipleCheck">
           <cell
           :title="'审签任务('+taskListData.CheckTask.length+')'"
           is-link
@@ -17,7 +17,7 @@
         </v-touch>
 
         <ul v-if="!isMultipleCheck" @click="goDetail" class="slide" :class="cellBoxPanel.checkUITask?'animate':''">
-          <li v-for="item in taskListData.CheckTask" taskCategory="CheckTask" :detailType="item.tasktype" :taskid="item.taskid">{{item.checkobject}}&nbsp;&nbsp;{{item.taskname}}</li>
+          <li v-for="(item, index) in taskListData.CheckTask" taskCategory="CheckTask" :detailType="item.tasktype" :taskid="item.taskid">{{index+1}}.&nbsp;{{item.checkobject}}&nbsp;&nbsp;{{item.taskname}}</li>
         </ul>
 
         <checklist v-if="isMultipleCheck" :options="mutipleList" v-model="mutipleListValue" class="slide" :class="cellBoxPanel.checkUITask?'animate':''"></checklist>
@@ -30,7 +30,7 @@
         @click.native="cellBoxPanel.projectUITask = !cellBoxPanel.projectUITask"></cell>
 
         <ul @click="goDetail" class="slide" :class="cellBoxPanel.projectUITask?'animate':''">
-          <li v-for="item in taskListData.PROJECT_TASK" taskCategory="PROJECT_TASK" :detailType="item.tasktype" :taskid="item.taskid">{{item.taskname}}</li>
+          <li v-for="(item, index) in taskListData.PROJECT_TASK" taskCategory="PROJECT_TASK" :detailType="item.tasktype" :taskid="item.taskid">{{index+1}}.&nbsp;{{item.taskname}}</li>
         </ul>
 
         <cell
@@ -41,7 +41,7 @@
         @click.native="cellBoxPanel.changeNoticeUITask = !cellBoxPanel.changeNoticeUITask"></cell>
 
         <ul @click="goDetail" class="slide" :class="cellBoxPanel.changeNoticeUITask?'animate':''">
-          <li v-for="item in taskListData.CHANGE_LISTENER" taskCategory="CHANGE_LISTENER" :detailType="item.tasktype" :taskid="item.taskid">{{item.infoObj.docid}}&nbsp;,&nbsp;{{item.infoObj.docver}}</li>
+          <li v-for="(item, index) in taskListData.CHANGE_LISTENER" taskCategory="CHANGE_LISTENER" :detailType="item.tasktype" :taskid="item.taskid">{{index+1}}.&nbsp;{{item.infoObj.docid}}&nbsp;,&nbsp;{{item.infoObj.docver}}</li>
         </ul>
 
         <cell
@@ -52,7 +52,7 @@
         @click.native="cellBoxPanel.faFangUITask = !cellBoxPanel.faFangUITask"></cell>
 
         <ul @click="goDetail" class="slide" :class="cellBoxPanel.faFangUITask?'animate':''">
-          <li v-for="item in taskListData.FAFANG_NOTICE" taskCategory="FAFANG_NOTICE" :detailType="item.tasktype" :taskid="item.taskid">{{item.infoObj.docid}}&nbsp;,&nbsp;{{item.infoObj.docname}}&nbsp;,&nbsp;{{item.infoObj.docver}}&nbsp;&nbsp;发放文档</li>
+          <li v-for="(item, index) in taskListData.FAFANG_NOTICE" taskCategory="FAFANG_NOTICE" :detailType="item.tasktype" :taskid="item.taskid">{{index+1}}.&nbsp;{{item.infoObj.docid}}&nbsp;,&nbsp;{{item.infoObj.docname}}&nbsp;,&nbsp;{{item.infoObj.docver}}&nbsp;&nbsp;发放文档</li>
         </ul>
       </group>
       <div style="text-align: right;padding: 20px 10px;"><img :src="Logo" alt="logo"></div>
@@ -413,11 +413,12 @@ export default {
   height: auto;
   line-height: 40px;
   background: #fbfbfb;
-  padding-left: 32px;
+  padding: 0 5px 0 20px;
   overflow: scroll;
 }
 .taskList li:nth-of-type(2n+1) {
-  background: #fffff9;
+  background: #b9b9b8;
+  color: white;
 }
 .ivu-collapse>.ivu-collapse-item>.ivu-collapse-header {
   text-align: left;

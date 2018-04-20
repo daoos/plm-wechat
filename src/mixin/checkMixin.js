@@ -92,6 +92,7 @@ const CheckMixin = {
             workid
           }
         }
+        console.log('requestObj', requestObj)
         tv.$vux.loading.show()
         request(requestObj).then(function (data) {
           if (data.status === 200) {
@@ -378,7 +379,8 @@ const CheckMixin = {
     /* 
      * 7 批量审批开始
      */
-    multipleCheck: function () {
+    multipleCheck: function (e) {
+      e.preventDefault() // 解决android 在浏览器中打开
       const tv = this
       tv.isMultipleCheck = true
     },
