@@ -2,6 +2,13 @@ plm 微信源码
 
 > for webchat
 
+## 构建step
+
+1. `npm install`
+2. `npm run dev`
+3. `npm run build`
+
+
 ## 项目介绍
 
 使用vue-cli构建的简单vue项目
