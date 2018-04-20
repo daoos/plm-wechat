@@ -21,9 +21,9 @@
       <TimeLineBox :workFlowInfo="workFlowInfo" />
       <div class="detailFooterBtn">
         <x-button type="primary" v-if="downloadFileInfo.code === 'S'" @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button>
-        <x-button type="primary" v-if="detailType === 'CHECK_CHG_TASK'" @click.native="_getChgNotifyList(detailsData)" disabled>变更通知</x-button>
-        <x-button type="primary" v-if="detailType === 'CHECK_BOM_TASK'" @click.native="_getbomstructuretable(detailsData)" disabled>结构</x-button>
-        <x-button type="primary" v-if="detailType === 'CHECK_CHGAPP_TASK'" @click.native="_getChgApplyBook(detailsData)" disabled>变更申请书</x-button>
+        <x-button type="primary" v-if="detailType === 'CHECK_CHG_TASK'" @click.native="_getChgNotifyList(detailsData)">变更通知</x-button>
+        <x-button type="primary" v-if="detailType === 'CHECK_BOM_TASK'" @click.native="_getbomstructuretable(detailsData)">结构</x-button>
+        <x-button type="primary" v-if="detailType === 'CHECK_CHGAPP_TASK'" @click.native="_getChgApplyBook(detailsData)">变更申请书</x-button>
         <x-button type="warn" v-if="detailType.indexOf('CHECK') > -1" @click.native="goCheckModal">审批</x-button>
       </div>
     </div>
