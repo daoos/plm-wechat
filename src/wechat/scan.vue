@@ -32,14 +32,14 @@
       <div class="backbtn" @click="backUp('onlyDetails')"></div>
       <Details detailType="chgNotifyDetails" :detailInfo="chgNotifyListDetail" />
       <div class="detailFooterBtn">
-        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="chgFileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
+        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="fileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
       </div>
     </div>
     <div v-if="currentStatus === 'chgApplyBookDetails'">
       <div class="backbtn" @click="backUp('onlyDetails')"></div>
       <Details detailType="chgNotifyDetails" :detailInfo="chgApplyBookDetail" />
       <div class="detailFooterBtn">
-        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="chgFileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
+        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="fileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
       </div>
     </div>
     <x-dialog
