@@ -218,6 +218,7 @@ const CheckMixin = {
                                   activeId: st.activeid,
                                   docNum: dd.docNum,
                                   docVer: dd.docVer,
+                                  personId: dd.personid||'',
                                   action,
                                   description: approveDescription
                                 };
@@ -230,6 +231,7 @@ const CheckMixin = {
                                   bomver: dd.bomVer,
                                   partid: dd.materialNum,
                                   partver: dd.materialVer,
+                                  personId: dd.personid||'',
                                   action,
                                   description: approveDescription
                                 };
@@ -238,6 +240,7 @@ const CheckMixin = {
                                 data = {
                                   workid: dd.taskid,
                                   activeId: st.activeid,
+                                  personId: dd.personid||'',
                                   action,
                                   description: approveDescription
                                 };
@@ -246,6 +249,7 @@ const CheckMixin = {
                                 data = {
                                   workid: dd.taskid,
                                   activeId: st.activeid,
+                                  personId: dd.personid||'',
                                   action,
                                   description: approveDescription
                                 };
