@@ -89,6 +89,7 @@ const CheckMixin = {
             billtypename,
             receivetime: tv.selectedTasks[0].receivetime,
             taskType: tv.selectedTasks[0].tasktype,
+            personid: tv.detailsData.personid||tv.detailsData.personId||'',
             workid
           }
         }

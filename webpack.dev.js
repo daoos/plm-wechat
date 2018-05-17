@@ -21,14 +21,14 @@ module.exports = merge(common, {
 	    compress: true,
 	    port: 9000,
 	    hot: true,
-	    host: '10.115.0.168',
-	    proxy: {
+	    host: '10.115.0.168'
+	    /*proxy: {
 	    	"/wxservice/": {
 	    		"target": "http://10.115.0.134/wxservice/",
 	    		"changeOrigin": true,
 	    		"pathRewrite": { "^/wxservice/" : "" }
 	    	}
-	    }
+	    }*/
 	},
 	mode: 'development'
 })

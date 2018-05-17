@@ -1,5 +1,5 @@
 module.exports = {
   // host: 'http://10.115.0.134/'
   host: '',
-  yonyouColor: '#e60012'
+  yonyouColor: 'rgb(230,40,79)'
 }
