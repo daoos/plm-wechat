@@ -136,6 +136,7 @@ const CheckMixin = {
           activeid: firstTask.activeid,
           receivetime: firstTask.receivetime,
           taskId: firstTask.taskid,
+          personid: tv.detailsData.personid||tv.detailsData.personId||'',
           type: firstTask.tasktype
         }
       }
