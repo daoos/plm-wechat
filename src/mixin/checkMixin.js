@@ -324,6 +324,7 @@ const CheckMixin = {
             type: tv.detailType,
             trpersonid: selectedPersonId,
             tranReason: des,
+            personid: tv.detailsData.personid||tv.detailsData.personId||'',
             receivetime: tv.selectedTasks[0].receivetime,
             activeid: tv.selectedTasks[0].activeid
         }
