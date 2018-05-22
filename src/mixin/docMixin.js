@@ -281,7 +281,6 @@ const DocMixin = {
         tv.$vux.loading.hide()
         return ;
       }
-      console.log('before ajax', obj)
       /* 获取任务详情信息 */
       const requestObj = {
         url: host + 'wxservice/downloadvalidate',
@@ -293,7 +292,6 @@ const DocMixin = {
           docType: obj.docFormat || obj.docType
         }
       }
-      console.log('requestObj', requestObj)
       request(requestObj).then(function (data) {
         if (data.status === 200) {
           tv.downloadFileInfo = data.data
