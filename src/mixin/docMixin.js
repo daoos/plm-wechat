@@ -281,17 +281,19 @@ const DocMixin = {
         tv.$vux.loading.hide()
         return ;
       }
+      console.log('before ajax', obj)
       /* 获取任务详情信息 */
       const requestObj = {
         url: host + 'wxservice/downloadvalidate',
         method: 'post',
         data: {
-          docName: obj.docName,
-          docNum: obj.docNum,
-          docVer: obj.docVer,
+          docName: obj.docName||obj.docname,
+          docNum: obj.docNum||obj.docid,
+          docVer: obj.docVer||docver,
           docType: obj.docFormat || obj.docType
         }
       }
+      console.log('requestObj', requestObj)
       request(requestObj).then(function (data) {
         if (data.status === 200) {
           tv.downloadFileInfo = data.data

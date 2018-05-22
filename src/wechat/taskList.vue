@@ -355,8 +355,8 @@ export default {
             currentLi = item
           }
         })
+        tv._resetData() // 重置状态
         tv.detailType = detailType
-        tv.selectedTasks.length = 0 //清空当前选中任务
         tv.selectedTasks.push(currentLi)
         tv.currentStatus = 'onlyDetails'
         tv.getDetails(currentLi)
@@ -371,6 +371,21 @@ export default {
     /* 跳转控制 */
     backUp: function (type) {
       this.currentStatus = type
+    },
+    /* 
+     * 重置信息
+     * from: tasklist
+     * to: taskDetail
+     * content: 任务详情、流程信息、下载信息、选中任务
+     * designer: heyunjiang
+     * time: 2018.5.22
+     */
+    _resetData: function () {
+      this.selectedTasks.length = 0
+      this.detailsData = {}
+      this.workFlowInfo = {code: 'F', list: []}
+      this.downloadFileInfo = {code: 'F', message: '', downloadUrl: ''}
+      this.chgDownloadFileInfo = {code: 'F', message: '', downloadUrl: ''}
     }
   },
   watch: {

@@ -315,7 +315,9 @@ export default {
                 })
                 break;
       }
+      console.log('before downloadvalidate------', tv.searchType)
       if (tv.searchType === 'doc') {
+        console.log('do downloadvalidate')
         tv.downloadvalidate(tv.detailsData)
       }
       tv.backUp('details')
