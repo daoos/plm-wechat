@@ -197,6 +197,12 @@ const DocMixin = {
             tv.chgApplyBookDetail = result.data[0] || {}
             tv.chgDownloadvalidate(result.data[0] || '')
             tv.backUp('chgApplyBookDetails')
+          } else if(result.status === '1') {
+            tv.httpError = {
+              show: true,
+              msg: result.message || '无变更申请书'
+            }
+            tv.$vux.loading.hide()
           } else {
             tv.httpError = {
               show: true,
@@ -218,6 +224,7 @@ const DocMixin = {
     /* 
      * 7 获取变更通知文档详情
      * 通过任务详情，获取对应通知详情
+     * status： 0->有变更通知 1->无变更申请书
      */
     _getChgNotifyList: function (obj) {
       if(typeof(obj) === 'undefined') {return ;}
@@ -238,6 +245,12 @@ const DocMixin = {
             tv.chgNotifyListDetail = result[0] || {}
             tv.chgDownloadvalidate(result[0] || '')
             tv.backUp('chgNotifyDetails')
+          } else if(result.status === '1') {
+            tv.httpError = {
+              show: true,
+              msg: result.message || '此变更通知无变更申请书'
+            }
+            tv.$vux.loading.hide()
           } else {
             tv.httpError = {
               show: true,

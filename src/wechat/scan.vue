@@ -14,7 +14,7 @@
     <div v-if="currentStatus === 'details'">
       <div class="backbtn" @click="backUp('searchResult')"></div>
       <Details :detailType="searchType" :detailInfo="detailsData" />
-      <div style="padding: 10px;"><x-button v-if="activeTab === 0" type="warn"  @click.native="fileDownload">下载</x-button></div>
+      <div style="padding: 10px;"><x-button v-if="searchType === 'doc'" type="warn"  @click.native="fileDownload">下载</x-button></div>
     </div>
     <div v-if="currentStatus === 'onlyDetails'">
       <Details :detailType="detailType" :detailInfo="detailsData" />
@@ -315,7 +315,7 @@ export default {
                 })
                 break;
       }
-      if (tv.activeTab === 0) {
+      if (tv.searchType === 'doc') {
         tv.downloadvalidate(tv.detailsData)
       }
       tv.backUp('details')

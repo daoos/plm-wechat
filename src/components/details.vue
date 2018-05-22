@@ -103,7 +103,7 @@
         </div>
       </ul>
     </div>
-    <div v-if="detailType === 'apply'">
+    <div v-if="detailType === 'apply' || detailType === 'CHECK_CHGAPP_TASK'">
       <header>{{detailInfo.chgApplyName}}</header>
       <ul>
         <li><span class="texttitle">编码:</span> {{detailInfo.chgApplyNum}}</li>
@@ -142,10 +142,10 @@
             </thead>
             <tbody>
               <tr v-for="item in detailInfo.relatedDesignBom">
-                <td>{{item.partid}}</td>
-                <td>{{item.partname}}</td>
-                <td>{{item.partver}}</td>
-                <td>{{item.bomname}}</td>
+                <td>{{item.partid||item.materailNum}}</td>
+                <td>{{item.partname||item.materailName}}</td>
+                <td>{{item.partver||item.materailVer}}</td>
+                <td>{{item.bomname||item.belongBom}}</td>
               </tr>
             </tbody>
           </x-table>
@@ -162,9 +162,9 @@
             </thead>
             <tbody>
               <tr v-for="item in detailInfo.relatedTechnicsBom">
-                <td>{{item.partid}}</td>
-                <td>{{item.partname}}</td>
-                <td>{{item.partver}}</td>
+                <td>{{item.partid||item.materailNum}}</td>
+                <td>{{item.partname||item.materailName}}</td>
+                <td>{{item.partver||item.materailVer}}</td>
               </tr>
             </tbody>
           </x-table>
@@ -180,15 +180,16 @@
             </thead>
             <tbody>
               <tr v-for="item in detailInfo.relatedTechnicsProcess">
-                <td>{{item.techprcid}}</td>
-                <td>{{item.techprcver}}</td>
+                <td>{{item.techprcid||item.technicNum}}</td>
+                <td>{{item.techprcver||item.technicName}}</td>
               </tr>
             </tbody>
           </x-table>
         </div>
+        <li v-if="detailType === 'CHECK_CHGAPP_TASK'"><span class="texttitle">流程图:</span> </li>
       </ul>
     </div>
-    <div v-if="detailType === 'task'">
+    <div v-if="detailType === 'task' || detailType === 'CHECK_CHG_TASK'">
       <header>{{detailInfo.chgTaskName}}</header>
       <ul>
         <li><span class="texttitle">执行人:</span> {{detailInfo.executePerson}}</li>
@@ -231,10 +232,10 @@
             </thead>
             <tbody>
               <tr v-for="item in detailInfo.relatedDesignBom">
-                <td>{{item.partid}}</td>
-                <td>{{item.partname}}</td>
-                <td>{{item.partver}}</td>
-                <td>{{item.bomname}}</td>
+                <td>{{item.partid||item.materailNum}}</td>
+                <td>{{item.partname||item.materailName}}</td>
+                <td>{{item.partver||item.materailVer}}</td>
+                <td>{{item.bomname||item.belongBom}}</td>
               </tr>
             </tbody>
           </x-table>
@@ -251,9 +252,9 @@
             </thead>
             <tbody>
               <tr v-for="item in detailInfo.relatedTechnicsBom">
-                <td>{{item.partid}}</td>
-                <td>{{item.partname}}</td>
-                <td>{{item.partver}}</td>
+                <td>{{item.partid||item.materailNum}}</td>
+                <td>{{item.partname||item.materailName}}</td>
+                <td>{{item.partver||item.materailVer}}</td>
               </tr>
             </tbody>
           </x-table>
@@ -269,12 +270,13 @@
             </thead>
             <tbody>
               <tr v-for="item in detailInfo.relatedTechnicsProcess">
-                <td>{{item.techprcid}}</td>
-                <td>{{item.techprcver}}</td>
+                <td>{{item.techprcid||item.technicNum}}</td>
+                <td>{{item.techprcver||item.technicName}}</td>
               </tr>
             </tbody>
           </x-table>
         </div>
+        <li v-if="detailType === 'CHECK_CHG_TASK'"><span class="texttitle">流程图:</span> </li>
       </ul>
     </div>
     <div v-if="detailType === 'PROJECT_TASK'">
@@ -439,7 +441,7 @@
         <li><span class="texttitle">流程图:</span> </li>
       </ul>
     </div>
-    <div v-if="detailType === 'CHECK_CHGAPP_TASK'">
+    <!-- <div v-if="detailType === 'CHECK_CHGAPP_TASK'">
       <header>任务详情</header>
       <ul>
         <li><span class="texttitle">审签节点名称:</span> {{detailInfo.shenqianNoteName}}</li>
@@ -473,7 +475,7 @@
         <li><span class="texttitle">流程名称:</span> {{detailInfo.belongProcedure}}</li>
         <li><span class="texttitle">流程图:</span> </li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
