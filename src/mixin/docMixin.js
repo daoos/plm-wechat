@@ -278,10 +278,10 @@ const DocMixin = {
       if(typeof(obj) === 'undefined') {return ;}
       const tv = this
       // console.log('obj', obj)
-      if (typeof(obj.docName) === 'undefined') {
+      /*if (typeof(obj.docName) === 'undefined') {
         tv.$vux.loading.hide()
         return ;
-      }
+      }*/
       /* 获取任务详情信息 */
       const requestObj = {
         url: host + 'wxservice/downloadvalidate',
@@ -289,7 +289,7 @@ const DocMixin = {
         data: {
           docName: obj.docName||obj.docname,
           docNum: obj.docNum||obj.docid,
-          docVer: obj.docVer||docver,
+          docVer: obj.docVer||obj.docver,
           docType: obj.docFormat || obj.docType
         }
       }

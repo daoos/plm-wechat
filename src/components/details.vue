@@ -20,7 +20,7 @@
         <li><span class="texttitle">修改人:</span> {{detailInfo.changePerson}}</li>
         <li><span class="texttitle">备注:</span> {{detailInfo.remarks}}</li>
         <li><span class="texttitle">关联的任务:</span> </li>
-        <div v-if="detailInfo.relatedTasks.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTasks&&detailInfo.relatedTasks.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -39,7 +39,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">关联的物料:</span> </li>
-        <div v-if="detailInfo.relatedMaterails.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedMaterails&&detailInfo.relatedMaterails.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -83,7 +83,7 @@
         <li><span class="texttitle">型号:</span> {{detailInfo.model}}</li>
         <li><span class="texttitle">产品类型:</span> {{detailInfo.productClass}}</li>
         <li><span class="texttitle">关联的文档:</span> </li>
-        <div v-if="detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDocs&&detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -111,7 +111,7 @@
         <li><span class="texttitle">创建人:</span> {{detailInfo.createPerson}}</li>
         <li><span class="texttitle">创建时间:</span> {{detailInfo.createTime}}</li>
         <li><span class="texttitle">文档变更:</span></li>
-        <div v-if="detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDocs&&detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -130,7 +130,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedDesignBom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDesignBom&&detailInfo.relatedDesignBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -151,7 +151,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedTechnicsBom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsBom&&detailInfo.relatedTechnicsBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -170,7 +170,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工序变更:</span> </li>
-        <div v-if="detailInfo.relatedTechnicsProcess.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsProcess&&detailInfo.relatedTechnicsProcess.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -201,7 +201,7 @@
         <li><span class="texttitle">实际开始时间:</span> {{detailInfo.realStartTime}}</li>
         <li><span class="texttitle">实际结束时间:</span> {{detailInfo.realEndTime}}</li>
         <li><span class="texttitle">文档变更:</span></li>
-        <div v-if="detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDocs&&detailInfo.relatedDocs.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -220,7 +220,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedDesignBom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedDesignBom&&detailInfo.relatedDesignBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -241,7 +241,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedTechnicsBom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsBom&&detailInfo.relatedTechnicsBom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -260,7 +260,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工序变更:</span> </li>
-        <div v-if="detailInfo.relatedTechnicsProcess.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedTechnicsProcess&&detailInfo.relatedTechnicsProcess.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -306,7 +306,7 @@
         <li><span class="texttitle">变更通知版本:</span> {{detailInfo.docver}}</li>
         <li><span class="texttitle">下发时间:</span> {{detailInfo.receivetime}}</li>
         <li><span class="texttitle">文档变更:</span></li>
-        <div v-if="detailInfo.relateddoc.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relateddoc&&detailInfo.relateddoc.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -325,7 +325,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">设计BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedbom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedbom&&detailInfo.relatedbom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -346,7 +346,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工艺BOM变更:</span> </li>
-        <div v-if="detailInfo.relatedtechbom.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedtechbom&&detailInfo.relatedtechbom.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
@@ -365,7 +365,7 @@
           </x-table>
         </div>
         <li><span class="texttitle">工序变更:</span> </li>
-        <div v-if="detailInfo.relatedtechprc.length>0" class="detailXTable" style="padding:0 15px;">
+        <div v-if="detailInfo.relatedtechprc&&detailInfo.relatedtechprc.length>0" class="detailXTable" style="padding:0 15px;">
           <x-table full-bordered style="background-color:#fff;">
             <thead>
               <tr style="background-color: #F7F7F7">
