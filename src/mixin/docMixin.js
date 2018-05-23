@@ -277,6 +277,7 @@ const DocMixin = {
     downloadvalidate: function (obj) {
       if(typeof(obj) === 'undefined') {return ;}
       const tv = this
+      // console.log('obj', obj)
       if (typeof(obj.docName) === 'undefined') {
         tv.$vux.loading.hide()
         return ;
@@ -292,7 +293,9 @@ const DocMixin = {
           docType: obj.docFormat || obj.docType
         }
       }
+      // console.log('requestObj', requestObj)
       request(requestObj).then(function (data) {
+        // console.log(data)
         if (data.status === 200) {
           tv.downloadFileInfo = data.data
         }

@@ -315,7 +315,9 @@ export default {
                 })
                 break;
       }
+      // console.log('searchType', tv.searchType, tv.detailsData)
       if (tv.searchType === 'doc') {
+        // console.log('before downloadvalidate')
         tv.downloadvalidate(tv.detailsData)
       }
       tv.backUp('details')
