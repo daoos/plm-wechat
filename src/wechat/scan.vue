@@ -17,7 +17,7 @@
       <div style="padding: 10px;"><x-button v-if="searchType === 'doc' && downloadFileInfo.code === 'S'" type="warn"  @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button></div>
     </div>
     <div v-if="currentStatus === 'onlyDetails'">
-      <Details :detailType="detailType" :detailInfo="detailsData" />
+      <Details :detailType="detailType" :detailInfo="detailsData.related&&Object.keys(detailsData.related).length>0?detailsData.related:detailsData" />
       <TimeLineBox :workFlowInfo="workFlowInfo" />
       <div class="detailFooterBtn">
         <x-button type="primary" v-if="downloadFileInfo.code === 'S'" @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button>

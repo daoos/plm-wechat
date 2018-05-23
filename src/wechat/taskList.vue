@@ -60,7 +60,7 @@
     <div v-if="currentStatus === 'onlyDetails'">
       <div class="backbtn" @click="backUp('taskList')"></div>
       <!-- 这里设置的detailInfo，如果detailsData.related有值，则它为变更申请或变更任务 -->
-      <Details :detailType="detailType" :detailInfo="Object.keys(detailsData.related).length>0?detailsData.related:detailsData" />
+      <Details :detailType="detailType" :detailInfo="detailsData.related&&Object.keys(detailsData.related).length>0?detailsData.related:detailsData" />
       <TimeLineBox :workFlowInfo="workFlowInfo" />
       <div class="detailFooterBtn">
         <x-button type="primary" v-if="downloadFileInfo.code === 'S'" @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button>

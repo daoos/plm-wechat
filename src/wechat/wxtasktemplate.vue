@@ -9,7 +9,7 @@
       {{errorDefaultInfo.content}}
     </div>
     <div v-if="currentStatus === 'onlyDetails'">
-      <Details :detailType="detailType" :detailInfo="detailsData" />
+      <Details :detailType="detailType" :detailInfo="detailsData.related&&Object.keys(detailsData.related).length>0?detailsData.related:detailsData" />
       <TimeLineBox :workFlowInfo="workFlowInfo" />
       <div class="detailFooterBtn">
         <x-button type="primary" v-if="downloadFileInfo.code === 'S'" @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button>
