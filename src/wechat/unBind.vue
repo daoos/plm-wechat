@@ -51,6 +51,7 @@ export default {
           tv.message = '解绑成功'
           tv.$vux.toast.show({
             text: '解绑成功',
+            time: 3000,
             onHide: wx.closeWindow()
           })
         } else {

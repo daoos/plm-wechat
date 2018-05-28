@@ -14,8 +14,8 @@
       <x-button type="warn" @click.native="submitTask(false, approveDescription)">打回</x-button>
     </group>
     <group v-if="userAuthority.bill.opertype === '1'">
-      <x-button type="primary" @click.native="submitTask(true, approveDescription)">通过</x-button>
-      <x-button type="warn" @click.native="submitTask(false, approveDescription)">不通过</x-button>
+      <x-button type="primary" @click.native="goDoSig(true, approveDescription)">通过</x-button>
+      <x-button type="warn" @click.native="goDoSig(false, approveDescription)">不通过</x-button>
     </group>
     <group>
       <x-button type="default" @click.native="cancel">取消</x-button>
@@ -31,7 +31,8 @@ export default {
     goDoTransfor: Function,
     userAuthority: Object,
     submitTask: Function,
-    modalCancel: Function
+    modalCancel: Function,
+    goDoSig: Function
   },
   components: {
     XTextarea,

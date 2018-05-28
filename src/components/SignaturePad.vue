@@ -2,18 +2,22 @@
  * 手写签章
  * designer: heyunjiang
  * time: 2018.5.25
+ * update: 2018.5.28
  */
 <template>
     <div id="app">
         <div class="sgBox">
-            <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'200px'"></vueSignature>
+            <div class="canvasbox">
+                <canvas ref="signature" class="canvasContent"></canvas>
+            </div>
         </div> 
         <group>
-          <x-button type="warn" @click.native="save">确认</x-button>
+          <x-button type="warn" @click.native="onOk">确认</x-button>
           <x-button type="default" @click.native="clear">清除</x-button>
           <x-button type="default" @click.native="undo">撤销上一步</x-button>
           <x-button type="default" @click.native="preview">预览</x-button>
-          <x-button type="default" @click.native="cancel">跳过</x-button>
+          <x-button type="default" @click.native="jump">跳过</x-button>
+          <x-button type="default" @click.native="cancel">取消</x-button>
         </group>
         <x-dialog
             v-model="img.show"
@@ -27,12 +31,18 @@
 
 <script>
 import { Group, XButton, XImg, XDialog } from 'vux'
+import SignaturePad from 'signature_pad'
 
 export default {
     name: "SP",
     props: {
         submitSig: Function,
-        ignoreSig: Function
+        ignoreSig: Function,
+        modalCancel: Function,
+        resize: {
+            type: Boolean,
+            default: true
+        }
     },
     components: {
         Group,
@@ -49,47 +59,63 @@ export default {
             img: {
                 show: false,
                 src: ''
-            }
+            },
+            sig:{}
         }
     },
     methods:{
+        /* 绘制 */
+        draw(){
+            var _this = this;
+            var canvas = _this.$refs.signature
+            _this.sig = new SignaturePad(canvas, _this.option);
+        },
         /* 跳过 */
+        jump() {
+            this.ignoreSig()
+        },
+        /* 取消 */
         cancel() {
-
+            this.sig.clear()
+            this.modalCancel()
         },
         /* 预览 */
         preview() {
-            var png = this.$refs.signature.save()
+            var png = this.sig.toDataURL()
             this.img.show = true
             this.img.src = png
         },
-        save() {
-            var _this = this;
-            var png = _this.$refs.signature.save()
-            var jpeg = _this.$refs.signature.save('image/jpeg')
-            var svg = _this.$refs.signature.save('image/svg+xml');
-            console.log(png);
-            /*console.log(jpeg)
-            console.log(svg)*/
+        onOk() {
+            this.submitSig(this.sig.toDataURL())
         },
         /* 清除 */
-        clear() { this.$refs.signature.clear(); },
+        clear() { this.sig.clear(); },
         /* 撤销 */
-        undo() { this.$refs.signature.undo(); },
-        /* 加水印 */
-        _addWaterMark() {
+        undo() { 
             var _this = this;
-            _this.$refs.signature.addWaterMark({
-                text:"mark text",          // watermark text, > default ''
-                font:"20px Arial",         // mark font, > default '20px sans-serif'
-                style:'all',               // fillText and strokeText,  'all'/'stroke'/'fill', > default 'fill		
-                fillStyle:"red",           // fillcolor, > default '#333' 
-                strokeStyle:"blue",	   // strokecolor, > default '#333'	
-                x:100,                     // fill positionX, > default 20
-                y:200,                     // fill positionY, > default 20				
-                sx:100,                    // stroke positionX, > default 40
-                sy:200                     // stroke positionY, > default 40
-            });
+            var data = _this.sig.toData();
+            if(data){
+                data.pop()
+                _this.sig.fromData(data);
+            }
+        },
+        // 更新canvas对象
+        resizeCanvas() {
+            var canvas = this.$refs.signature;
+            var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+    },
+    mounted() {
+        window.addEventListener("resize", this.resizeCanvas);
+        this.resizeCanvas()
+        this.$nextTick(() => { this.draw() });
+    },
+    watch: {
+        resize: function() {
+            this.resizeCanvas()
         }
     }
 };
@@ -103,5 +129,13 @@ export default {
     .sgBox,
     .previewBox {
         border: 1px solid #ece9e9;
+    }
+    .canvasbox {
+        width: 100%;
+        height: 200px;
+    }
+    .canvasContent {
+        height: 100%;
+        width: 100%;
     }
 </style>

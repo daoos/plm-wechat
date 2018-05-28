@@ -89,13 +89,20 @@
         v-model="modalStatus.checkModalStatus"
         title="执行审批"
         :dialog-style="{width: '90%', maxWidth: '90%', padding: '10px'}">
-        <TaskCheck :modalCancel="modalCancel" :goDoTransfor="goDoTransfor" :userAuthority="userAuthority" :submitTask="submitTask" />
+        <TaskCheck :modalCancel="modalCancel" :goDoTransfor="goDoTransfor" :userAuthority="userAuthority" :submitTask="submitTask" :goDoSig="goDoSig" />
     </x-dialog>
     <x-dialog
         v-model="modalStatus.doTransfor"
         title="执行转发"
         :dialog-style="{width: '90%', maxWidth: '90%', padding: '10px'}">
         <Transfer :modalCancel="modalCancel" :doTransforModal="modalStatus.doTransfor" :transforPersonList="transforPersonList" :submitTrans="submitTrans" />
+        <div slot="footer"></div>
+    </x-dialog>
+    <x-dialog
+        v-model="modalStatus.sigModalStatus"
+        title="签章"
+        :dialog-style="{width: '90%', maxWidth: '90%', padding: '10px'}">
+        <SP :modalCancel="modalCancel" :resize="modalStatus.sigModalStatus" :submitSig="submitSig" :ignoreSig="ignoreSig"></SP>
         <div slot="footer"></div>
     </x-dialog>
     <x-dialog
@@ -171,6 +178,7 @@ import TaskCheck from '../components/TaskCheck'
 import Transfer from '../components/Transfer'
 import Details from '../components/details'
 import TimeLineBox from '../components/TimeLineBox'
+import SP from '../components/SignaturePad'
 import request from '../utils/request.js'
 import {host} from '../utils/config.js'
 import Logo from '../img/logo.png'
@@ -190,7 +198,8 @@ export default {
     TaskCheck,
     Transfer,
     Checklist,
-    XTable
+    XTable,
+    SP
   },
   mixins: [CheckMixin, DocMixin],
   data () {

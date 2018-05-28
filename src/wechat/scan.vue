@@ -14,7 +14,7 @@
     <div v-if="currentStatus === 'details'">
       <div class="backbtn" @click="backUp('searchResult')"></div>
       <Details :detailType="searchType" :detailInfo="detailsData" />
-      <div style="padding: 10px;"><x-button v-if="searchType === 'doc' && downloadFileInfo.code === 'S'" type="warn"  @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button></div>
+      <div style="padding: 10px;"><x-button v-if="searchType === 'doc'" type="warn"  @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button></div>
     </div>
     <div v-if="currentStatus === 'onlyDetails'">
       <Details :detailType="detailType" :detailInfo="detailsData.related&&Object.keys(detailsData.related).length>0?detailsData.related:detailsData" />
@@ -46,13 +46,20 @@
         v-model="modalStatus.checkModalStatus"
         title="执行审批"
         :dialog-style="{width: '90%', maxWidth: '90%', padding: '10px'}">
-        <TaskCheck :modalCancel="modalCancel" :goDoTransfor="goDoTransfor" :userAuthority="userAuthority" :submitTask="submitTask" />
+        <TaskCheck :modalCancel="modalCancel" :goDoTransfor="goDoTransfor" :userAuthority="userAuthority" :submitTask="submitTask" :goDoSig="goDoSig" />
     </x-dialog>
     <x-dialog
         v-model="modalStatus.doTransfor"
         title="执行转发"
         :dialog-style="{width: '90%', maxWidth: '90%', padding: '10px'}">
         <Transfer :modalCancel="modalCancel" :doTransforModal="modalStatus.doTransfor" :transforPersonList="transforPersonList" :submitTrans="submitTrans" />
+        <div slot="footer"></div>
+    </x-dialog>
+    <x-dialog
+        v-model="modalStatus.sigModalStatus"
+        title="签章"
+        :dialog-style="{width: '90%', maxWidth: '90%', padding: '10px'}">
+        <SP :modalCancel="modalCancel" :resize="modalStatus.sigModalStatus" :submitSig="submitSig" :ignoreSig="ignoreSig"></SP>
         <div slot="footer"></div>
     </x-dialog>
     <x-dialog
@@ -105,6 +112,7 @@ import Details from '../components/details'
 import CheckMixin from '../mixin/checkMixin'
 import TaskCheck from '../components/TaskCheck'
 import Transfer from '../components/Transfer'
+import SP from '../components/SignaturePad'
 import DocMixin from '../mixin/docMixin'
 import request from '../utils/request.js'
 import {host} from '../utils/config.js'
@@ -122,7 +130,8 @@ export default {
     TimeLineBox,
     TaskCheck,
     Transfer,
-    XTable
+    XTable,
+    SP
   },
   mixins: [CheckMixin, DocMixin],
   data () {

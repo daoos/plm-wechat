@@ -44,13 +44,16 @@ const CheckMixin = {
       },
       modalStatus: {
         checkModalStatus: false, //审批弹出框状态
-        doTransfor: false //转发
+        doTransfor: false, //转发
+        sigModalStatus: false // 手写签章
       },
       transforPersonList: [],
       bomStructure: {             //Bom结构，用于Modal展示
         code: 'F',
         list: []
-      }
+      },
+      checkDescription: '', // 审批描述信息
+      isPassed: 0 // 通过与否
   	}
   },
   methods: {
@@ -61,7 +64,8 @@ const CheckMixin = {
         // 批量审批
         tv.modalStatus = {
           checkModalStatus: true,
-          doTransfor: false
+          doTransfor: false,
+          sigModalStatus
         }
       } else {
         let workid, billtypename
@@ -100,7 +104,8 @@ const CheckMixin = {
             tv.userAuthority = data.data
             tv.modalStatus = {
               checkModalStatus: true,
-              doTransfor: false
+              doTransfor: false,
+              sigModalStatus: false
             }
           }else {
             tv.httpError = {
@@ -159,7 +164,8 @@ const CheckMixin = {
           tv.transforPersonList = arr
           tv.modalStatus = {
             checkModalStatus: false,
-            doTransfor: true
+            doTransfor: true,
+            sigModalStatus: false
           }
         }else {
           tv.httpError = {
@@ -192,6 +198,7 @@ const CheckMixin = {
         }
       } else {
         if (bool) {
+          // 通过
           action = 'Y'
         } else {
           action = 'N'
@@ -379,7 +386,8 @@ const CheckMixin = {
     modalCancel: function () {
       this.modalStatus = {
         checkModalStatus: false,
-        doTransfor: false
+        doTransfor: false,
+        sigModalStatus: false
       }
       this.isMultipleCheck = false
     },
@@ -462,6 +470,29 @@ const CheckMixin = {
       }
       billobjectkey = encodeURI(billobjectkey).replace(/'/g,'\\"')
       return billobjectkey;
+    },
+    // 12 打开签章模态框
+    goDoSig: function(bool, approveDescription) {
+      this.modalStatus = {
+        checkModalStatus: false,
+        doTransfor: false,
+        sigModalStatus: true
+      }
+      this.checkDescription = approveDescription
+      this.isPassed = bool
+    },
+    // 13 手写签章 提交
+    submitSig: function(png) {
+      console.log(png)
+      // 先提交图片
+
+      //再提交审批信息
+      this.submitTask(this.isPassed, this.checkDescription)
+    },
+    // 14 手写签章 跳过
+    ignoreSig: function() {
+      // 直接提交申签信息
+      this.submitTask(this.isPassed, this.checkDescription)
     }
   }
 }
