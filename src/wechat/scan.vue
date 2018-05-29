@@ -20,7 +20,7 @@
       <Details :detailType="detailType" :detailInfo="detailsData.related&&Object.keys(detailsData.related).length>0?detailsData.related:detailsData" />
       <TimeLineBox :workFlowInfo="workFlowInfo" />
       <div class="detailFooterBtn">
-        <x-button type="primary" v-if="downloadFileInfo.code === 'S'" @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button>
+        <x-button type="primary" v-if="permissionDownload.indexOf(detailType)>-1" @click.native="fileDownload(downloadFileInfo)">下载{{downloadFileInfo.message}}</x-button>
         <x-button type="primary" v-if="detailType === 'CHECK_CHG_TASK'" @click.native="_getChgNotifyList(detailsData)">变更通知</x-button>
         <x-button type="primary" v-if="detailType === 'CHECK_BOM_TASK'" @click.native="_getbomstructuretable(detailsData)">结构</x-button>
         <x-button type="primary" v-if="detailType === 'CHECK_CHGAPP_TASK'" @click.native="_getChgApplyBook(detailsData)">变更申请书</x-button>
@@ -32,14 +32,14 @@
       <div class="backbtn" @click="backUp('onlyDetails')"></div>
       <Details detailType="chgNotifyDetails" :detailInfo="chgNotifyListDetail" />
       <div class="detailFooterBtn">
-        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="fileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
+        <x-button type="primary" @click.native="fileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
       </div>
     </div>
     <div v-if="currentStatus === 'chgApplyBookDetails'">
       <div class="backbtn" @click="backUp('onlyDetails')"></div>
       <Details detailType="chgNotifyDetails" :detailInfo="chgApplyBookDetail" />
       <div class="detailFooterBtn">
-        <x-button type="primary" v-if="chgDownloadFileInfo.code === 'S'" @click.native="fileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
+        <x-button type="primary" @click.native="fileDownload(chgDownloadFileInfo)">下载{{chgDownloadFileInfo.message}}</x-button>
       </div>
     </div>
     <x-dialog

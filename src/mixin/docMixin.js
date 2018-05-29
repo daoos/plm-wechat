@@ -46,7 +46,8 @@ const DocMixin = {
       bomStructureModalStatus: false, //BOM结构展示
       bomStructuresDatas: [], // bom结构数据
       chgApplyBookDetail: {}, //变更申请书详情
-      chgNotifyListDetail: {} //变更通知详情
+      chgNotifyListDetail: {}, //变更通知详情
+      permissionDownload: ['CHECK_DOC_TASK', 'FAFANG_NOTICE', 'CHANGE_LISTENER', ]
   	}
   },
   methods: {
