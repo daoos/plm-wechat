@@ -167,7 +167,7 @@ export default {
     getResultList: function () {
       const tv = this
       const requestObj = {
-        url: host + 'wxservice/wxsearchquery',
+        url: host + 'wxservice/qrcodeSearchQuery',
         method: 'post',
         data: {
           index: tv.searchPage,
