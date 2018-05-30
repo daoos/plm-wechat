@@ -482,12 +482,38 @@ const CheckMixin = {
       this.isPassed = bool
     },
     // 13 手写签章 提交
-    submitSig: function(png) {
-      console.log(png)
+    submitSig: function(img) {
+      console.log(img)
+      const tv = this
       // 先提交图片
-
-      //再提交审批信息
-      this.submitTask(this.isPassed, this.checkDescription)
+      const requestObj = {
+          url: host + 'wxservice/updateSignature',
+          method: 'post',
+          data: {
+            rawData: img,
+            format: 'jpg'
+          }
+      }
+      request(requestObj).then(function (data) {
+        if (data.status === 200) {
+          if (data.data.status === 'success') {
+            //再提交审批信息
+            tv.submitTask(tv.isPassed, tv.checkDescription)
+          } else {
+            tv.httpError = {
+              show: true,
+              msg: data.data.message
+            }
+          }
+        }else {
+          tv.httpError = {
+            show: true,
+            msg: data.error.message
+          }
+        }
+      }).catch(function (error) {
+          console.log(error.message)
+      })
     },
     // 14 手写签章 跳过
     ignoreSig: function() {

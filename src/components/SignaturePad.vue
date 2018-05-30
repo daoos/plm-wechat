@@ -81,12 +81,12 @@ export default {
         },
         /* 预览 */
         preview() {
-            var png = this.sig.toDataURL()
+            var png = this.sig.toDataURL("image/jpeg")
             this.img.show = true
             this.img.src = png
         },
         onOk() {
-            this.submitSig(this.sig.toDataURL())
+            this.submitSig(this.sig.toDataURL("image/jpeg"))
         },
         /* 清除 */
         clear() { this.sig.clear(); },
