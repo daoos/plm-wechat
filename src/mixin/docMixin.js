@@ -291,7 +291,7 @@ const DocMixin = {
           docName: obj.docName||obj.docname,
           docNum: obj.docNum||obj.docid,
           docVer: obj.docVer||obj.docver,
-          docType: obj.docFormat || obj.docType
+          docType: obj.docFormat || obj.docType || obj.docformat
         }
       }
       // console.log('requestObj', requestObj)
@@ -325,7 +325,7 @@ const DocMixin = {
           docName: obj.docName,
           docNum: obj.docNum,
           docVer: obj.docVer,
-          docType: obj.docFormat || obj.docType
+          docType: obj.docFormat || obj.docType || obj.docformat
         }
       }
       request(requestObj).then(function (data) {
