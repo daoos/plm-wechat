@@ -491,7 +491,7 @@ const CheckMixin = {
           method: 'post',
           data: {
             rawData: img,
-            format: 'jpg'
+            format: '.jpg'
           }
       }
       request(requestObj).then(function (data) {
