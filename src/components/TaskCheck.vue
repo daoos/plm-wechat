@@ -12,12 +12,12 @@
       <x-button type="warn" @click.native="goDoTransfor">转发</x-button>
     </group>
     <group v-if="userAuthority.bill.opertype === '0'">
-      <x-button type="primary" @click.native="Config.isBuild?submitTask(true, approveDescription):goDoSig(true, approveDescription)">提交</x-button>
-      <x-button type="warn" @click.native="Config.isBuild?submitTask(false, approveDescription):goDoSig(false, approveDescription)">打回</x-button>
+      <x-button type="primary" @click.native="judge(true)">提交</x-button>
+      <x-button type="warn" @click.native="submitTask(false, approveDescription)">打回</x-button>
     </group>
     <group v-if="userAuthority.bill.opertype === '1'">
-      <x-button type="primary" @click.native="Config.isBuild?submitTask(true, approveDescription):goDoSig(true, approveDescription)">通过</x-button>
-      <x-button type="warn" @click.native="Config.isBuild?submitTask(false, approveDescription):goDoSig(false, approveDescription)">不通过</x-button>
+      <x-button type="primary" @click.native="judge(true)">通过</x-button>
+      <x-button type="warn" @click.native="submitTask(false, approveDescription)">不通过</x-button>
     </group>
     <group>
       <x-button type="default" @click.native="cancel">取消</x-button>
@@ -52,6 +52,13 @@ export default {
     cancel: function () {
       this.modalCancel()
       this.approveDescription = ''
+    },
+    judge: function (status) {
+      if(Config.isBuild) {
+        this.submitTask(status, this.approveDescription)
+      } else {
+        this.goDoSig(status, this.approveDescription)
+      }
     }
   }
 }

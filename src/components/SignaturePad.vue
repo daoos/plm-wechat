@@ -14,8 +14,6 @@
         <group>
           <x-button type="warn" @click.native="onOk">确认</x-button>
           <x-button type="default" @click.native="clear">清除</x-button>
-          <x-button type="default" @click.native="undo">撤销上一步</x-button>
-          <x-button type="default" @click.native="preview">预览</x-button>
           <x-button type="default" @click.native="jump">跳过</x-button>
           <x-button type="default" @click.native="cancel">取消</x-button>
         </group>
