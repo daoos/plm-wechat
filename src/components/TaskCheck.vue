@@ -12,8 +12,8 @@
       <x-button type="warn" @click.native="goDoTransfor">转发</x-button>
     </group>
     <group v-if="userAuthority.bill.opertype === '0'">
-      <x-button type="primary" @click.native="submitTask(true, approveDescription)">提交</x-button>
-      <x-button type="warn" @click.native="submitTask(false, approveDescription)">打回</x-button>
+      <x-button type="primary" @click.native="Config.isBuild?submitTask(true, approveDescription):goDoSig(true, approveDescription)">提交</x-button>
+      <x-button type="warn" @click.native="Config.isBuild?submitTask(false, approveDescription):goDoSig(false, approveDescription)">打回</x-button>
     </group>
     <group v-if="userAuthority.bill.opertype === '1'">
       <x-button type="primary" @click.native="Config.isBuild?submitTask(true, approveDescription):goDoSig(true, approveDescription)">通过</x-button>
