@@ -40,7 +40,8 @@ const CheckMixin = {
         bill: {
           opertype: '0'
         },
-        code: 'S'
+        code: 'S',
+        wxSignature: false // 是否开启微信手写签章
       },
       modalStatus: {
         checkModalStatus: false, //审批弹出框状态

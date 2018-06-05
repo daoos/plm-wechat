@@ -2,7 +2,7 @@
  * 手写签章
  * designer: heyunjiang
  * time: 2018.5.25
- * update: 2018.5.28
+ * update: 2018.6.5
  */
 <template>
     <div id="app">
