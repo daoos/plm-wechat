@@ -84,6 +84,7 @@ export default {
             this.img.src = png
         },
         onOk() {
+            console.log(this.sig.toDataURL("image/jpeg"))
             this.submitSig(this.sig.toDataURL("image/jpeg"))
         },
         /* 清除 */
@@ -104,6 +105,7 @@ export default {
             canvas.width = canvas.offsetWidth * ratio;
             canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
+            this.sig.clear&&this.sig.clear() // 重置canvas之后，需要清除一下
         }
     },
     mounted() {

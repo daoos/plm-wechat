@@ -483,7 +483,6 @@ const CheckMixin = {
     },
     // 13 手写签章 提交
     submitSig: function(img) {
-      console.log(img)
       const tv = this
       // 先提交图片
       const requestObj = {
