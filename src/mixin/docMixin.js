@@ -243,8 +243,8 @@ const DocMixin = {
         if (data.status === 200) {
           const result = data.data
           if (result.status === '0') {
-            tv.chgNotifyListDetail = result[0] || {}
-            tv.chgDownloadvalidate(result[0] || '')
+            tv.chgNotifyListDetail = result.data[0] || {}
+            tv.chgDownloadvalidate(result.data[0] || '')
             tv.backUp('chgNotifyDetails')
           } else if(result.status === '1') {
             tv.httpError = {
