@@ -54,7 +54,7 @@ export default {
       this.approveDescription = ''
     },
     judge: function (status) {
-      if(Config.isBuild || userAuthority.wxSignature) {
+      if(Config.isBuild || (typeof(userAuthority.wxSignature)!=='undefined'&&!userAuthority.wxSignature)) {
         this.submitTask(status, this.approveDescription)
       } else {
         this.goDoSig(status, this.approveDescription)
