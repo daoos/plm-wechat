@@ -8,7 +8,8 @@ module.exports = merge(common, {
 	// devtool: 'cheap-module-source-map',
 	plugins: Object.keys(common.entry).map(function(item){
 	    return new HtmlWebpackPlugin({
-	      filename: path.resolve(__dirname, './dist/' + item + '.html'),
+	      filename: path.resolve(__dirname, './dist/' + item + '.html'), // use for build
+	      // filename: path.resolve(__dirname, './dist/index.html'), // just for test
 	      template: 'src/template/' + item + '.html',
 	      chunks: [item],
 	      inject: true,

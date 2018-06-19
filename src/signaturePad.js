@@ -9,3 +9,5 @@ new Vue({
   components: { SignaturePad },
   template: '<SignaturePad />'
 })
+
+// register service workers here
