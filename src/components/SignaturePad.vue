@@ -7,7 +7,7 @@
 <template>
     <div id="app">
         <div class="sgBox">
-            <div class="canvasbox">
+            <div class="canvasbox" :style="{height: height}">
                 <canvas ref="signature" class="canvasContent"></canvas>
             </div>
         </div> 
@@ -39,8 +39,9 @@ export default {
         modalCancel: Function,
         resize: {
             type: Boolean,
-            default: true
-        }
+            default: false
+        },
+        canvasRadios: Object
     },
     components: {
         Group,
@@ -58,6 +59,7 @@ export default {
                 show: false,
                 src: ''
             },
+            height: '300px',
             sig:{}
         }
     },
@@ -98,12 +100,17 @@ export default {
                 _this.sig.fromData(data);
             }
         },
-        // 更新canvas对象
+        // 更新canvas对象，绘制比例， 设置 canvas 及父 div 高度
         resizeCanvas() {
-            var canvas = this.$refs.signature;
-            var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+            const { height = 7, width = 12 } = this.canvasRadios;
+            const canvas = this.$refs.signature;
+            const cowidth = canvas.offsetWidth * height / width;
+
+            this.height = cowidth + 'px';
+
+            let ratio =  Math.max(window.devicePixelRatio || 1, 1);
             canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
+            canvas.height = cowidth * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
             this.sig.clear&&this.sig.clear() // 重置canvas之后，需要清除一下
         }
@@ -114,6 +121,7 @@ export default {
         this.$nextTick(() => { this.draw() });
     },
     watch: {
+        // 每次弹出，重置画布
         resize: function() {
             this.resizeCanvas()
         }

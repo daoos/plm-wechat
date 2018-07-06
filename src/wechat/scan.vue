@@ -59,7 +59,7 @@
         v-model="modalStatus.sigModalStatus"
         title="签章"
         :dialog-style="{width: '90%', maxWidth: '90%', padding: '10px'}">
-        <SP :modalCancel="modalCancel" :resize="modalStatus.sigModalStatus" :submitSig="submitSig" :ignoreSig="ignoreSig"></SP>
+        <SP :modalCancel="modalCancel" :resize="modalStatus.sigModalStatus" :submitSig="submitSig" :ignoreSig="ignoreSig" :canvasRadios="userAuthority.imgMeta||{}"></SP>
         <div slot="footer"></div>
     </x-dialog>
     <x-dialog
