@@ -9,14 +9,15 @@ function resolve (dir) {
 
 const webpackConfig = {
   entry: {
-    tasklist: './src/taskList.js',
+    /*tasklist: './src/taskList.js',
     binduser: './src/bindUser.js',
     unbinduser: './src/unBindUser.js',
     search: './src/search.js',
     scan: './src/scan.js',
     wxtemplatenotice: './src/wxtasktemplate.js',
-    wxdownload: './src/download.js'
+    wxdownload: './src/download.js'*/
     // signaturepad: './src/signaturePad.js'
+    todo: './src/todo.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
