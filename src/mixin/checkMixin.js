@@ -491,7 +491,9 @@ const CheckMixin = {
           method: 'post',
           data: {
             rawData: img,
-            format: '.jpg'
+            format: '.jpg',
+            width: tv.userAuthority.imgMeta.width || 0,
+            height: tv.userAuthority.imgMeta.height || 0
           }
       }
       request(requestObj).then(function (data) {
